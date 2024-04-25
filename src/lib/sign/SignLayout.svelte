@@ -22,6 +22,7 @@
   export let scanning: boolean = false;
   let unames = new Set<string>();
   let signType = SignType.normal;
+  let videoPlayer: { captureEnc: () => Promise<string> };
   let userListDisabled = false;
   onMount(async () => {
     await prepareSign(sign, accounts);
@@ -60,6 +61,8 @@
   <Users bind:accounts bind:unames bind:disabled={userListDisabled} />
   {#if signType == SignType.qrcode}
     <QrCode
+      bind:unames
+      bind:videoPlayer
       bind:state
       bind:scanning
       on:sign={onSign}

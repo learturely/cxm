@@ -1,7 +1,7 @@
 {
-  "productName": "csm",
+  "productName": "cxm",
   "version": "0.0.0",
-  "identifier": "up.workso.csm",
+  "identifier": "rt.lea.cxm",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:5173",
@@ -11,7 +11,7 @@
   "app": {
     "windows": [
       {
-        "title": "csm",
+        "title": "cxm",
         "width": 800,
         "height": 600
       }

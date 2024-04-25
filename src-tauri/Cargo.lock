@@ -978,28 +978,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "csm"
-version = "0.0.0"
-dependencies = [
- "chrono",
- "clap",
- "cxsign",
- "env_logger",
- "image",
- "log",
- "percent-encoding",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "tauri-plugin-barcode-scanner",
- "tauri-plugin-dialog",
- "tauri-plugin-shell",
- "ureq",
- "xcap",
-]
-
-[[package]]
 name = "cssparser"
 version = "0.27.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1062,6 +1040,28 @@ name = "custom_derive"
 version = "0.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ef8ae57c4978a2acd8b869ce6b9ca1dfe817bff704c220209fdef2c0b75a01b9"
+
+[[package]]
+name = "cxm"
+version = "0.0.0"
+dependencies = [
+ "chrono",
+ "clap",
+ "cxsign",
+ "env_logger",
+ "image",
+ "log",
+ "percent-encoding",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-barcode-scanner",
+ "tauri-plugin-dialog",
+ "tauri-plugin-shell",
+ "ureq",
+ "xcap",
+]
 
 [[package]]
 name = "cxsign"

@@ -19,6 +19,7 @@ use crate::{
     signner::TauriQrCodeSignner, AccountPair, CurrentSignState, CurrentSignUnamesState,
     DataBaseState, SessionsState,
 };
+
 #[derive(Serialize)]
 pub struct RawSignPair {
     sign: RawSign,
@@ -29,6 +30,7 @@ pub struct RawSignPair {
 pub struct LocationSignnerInfo {
     pub location_str: Option<String>,
 }
+
 impl FromStr for LocationSignnerInfo {
     type Err = serde_json::Error;
 
@@ -118,6 +120,7 @@ pub async fn get_sign_type(
         .to_string();
     Ok(t)
 }
+
 fn handle_results(results: HashMap<&Session, SignResult>, app_handle: &tauri::AppHandle) {
     for (session, result) in results {
         match result {
@@ -134,6 +137,7 @@ fn handle_results(results: HashMap<&Session, SignResult>, app_handle: &tauri::Ap
         }
     }
 }
+
 #[tauri::command]
 pub async fn sign_single(
     db_state: tauri::State<'_, DataBaseState>,
@@ -312,6 +316,7 @@ pub async fn remove_uname(
 ) -> Result<bool, String> {
     Ok(state.0.lock().unwrap().remove(&uname))
 }
+
 #[tauri::command]
 pub async fn add_uname(
     uname: String,
@@ -319,6 +324,7 @@ pub async fn add_uname(
 ) -> Result<bool, String> {
     Ok(state.0.lock().unwrap().insert(uname))
 }
+
 #[tauri::command]
 pub async fn add_unames(
     unames: Vec<String>,
@@ -336,6 +342,7 @@ pub async fn has_uname(
 ) -> Result<bool, String> {
     Ok(state.0.lock().unwrap().contains(&uname))
 }
+
 #[tauri::command]
 pub async fn clear_unames(state: tauri::State<'_, CurrentSignUnamesState>) -> Result<(), String> {
     state.0.lock().unwrap().clear();

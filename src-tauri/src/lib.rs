@@ -6,6 +6,9 @@
 #![feature(map_try_insert)]
 
 mod command;
+mod live;
+mod protocol;
+mod room;
 mod signner;
 mod state;
 mod tools;
@@ -77,6 +80,9 @@ pub fn run() {
             get_config_dir,
             list_accounts,
             load_accounts,
+            list_rooms,
+            code_to_video_path,
+            get_video_pathes_now,
             load_courses,
             list_courses,
             list_course_activities,
@@ -93,4 +99,14 @@ pub fn run() {
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+#[cfg(test)]
+mod test {
+    #[test]
+    fn test() {
+        for i in 0..360 {
+            let (y, t, w) = crate::tools::date_count_to_year_term_week(2024, i);
+            println!("{y}, {t}, {w}");
+        }
+    }
 }

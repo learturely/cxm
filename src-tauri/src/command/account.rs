@@ -12,12 +12,14 @@ pub async fn has_accounts(db_state: tauri::State<'_, DataBaseState>) -> Result<b
     let table = AccountTable::from_ref(&db);
     Ok(!table.get_accounts().is_empty())
 }
+
 #[tauri::command]
 pub async fn get_config_dir(
     dir_state: tauri::State<'_, cxsign::utils::Dir>,
 ) -> Result<String, String> {
     Ok(dir_state.get_config_dir().to_str().unwrap_or("").to_owned())
 }
+
 #[tauri::command]
 pub async fn add_account(
     uname: String,
@@ -47,6 +49,7 @@ pub async fn add_account(
         .insert(uname, session);
     Ok(())
 }
+
 #[tauri::command]
 pub async fn refresh_accounts(
     unames: Vec<String>,
@@ -79,6 +82,7 @@ pub async fn refresh_accounts(
     }
     Ok(())
 }
+
 #[tauri::command]
 pub async fn delete_accounts(
     unames: Vec<String>,
@@ -97,12 +101,14 @@ pub async fn delete_accounts(
     }
     Ok(())
 }
+
 #[derive(Serialize, Clone, Deserialize, Hash)]
 pub struct AccountPair {
     uname: String,
     name: String,
     avatar: String,
 }
+
 impl AccountPair {
     pub fn get_uname(&self) -> &str {
         &self.uname
@@ -128,16 +134,19 @@ impl AccountPair {
         )
     }
 }
+
 impl From<&Session> for AccountPair {
     fn from(session: &Session) -> Self {
         AccountPair::from_internal(session)
     }
 }
+
 impl From<Session> for AccountPair {
     fn from(session: Session) -> Self {
         AccountPair::from_internal(&session)
     }
 }
+
 #[tauri::command]
 pub async fn list_accounts(
     sessions_state: tauri::State<'_, SessionsState>,
@@ -150,6 +159,7 @@ pub async fn list_accounts(
     });
     Ok(vec.collect())
 }
+
 #[tauri::command]
 pub async fn load_accounts(
     db_state: tauri::State<'_, DataBaseState>,
