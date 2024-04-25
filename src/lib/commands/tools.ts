@@ -2,14 +2,24 @@ import { invoke } from "@tauri-apps/api/core";
 import {
   CAN_USE_CAM,
   CAN_USE_CAP,
+  CAN_USE_HLS,
   GET_QR_CODE_TYPE_COUNT,
   OS_NAME,
 } from "./constants";
+
+export type Room = { code: string; url: VideoPath };
+export type VideoPath = {
+  ppt_video: string | null;
+  teacher_full: string | null;
+  teacher_track: string | null;
+  student_full: string | null;
+};
 export enum Page {
   home,
   login,
   courseSigns,
   sign,
+  livePlayer,
   qrCodeScanner,
   // locations,
   // locationImpoter,
@@ -48,6 +58,9 @@ export async function scanImage(
 }
 export function osName(): string {
   return OS_NAME;
+}
+export function canUseHls(): boolean {
+  return CAN_USE_HLS;
 }
 export function canUseCam(): boolean {
   return CAN_USE_CAM;

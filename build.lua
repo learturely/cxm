@@ -48,12 +48,14 @@ function ConstantsGen()
         return s:match "^%s*(.-)%s*$"
     end
     local js_code = [[
+export const IS_DEBUG: boolean = %s;
 export const OS_NAME: string = "%s";
+export const CAN_USE_HLS: boolean = %s;
 export const CAN_USE_CAM: boolean = %s;
 export const CAN_USE_CAP: boolean = %s;
 export const GET_QR_CODE_TYPE_COUNT: number = %d;
     ]];
-    js_code = string.format(js_code, OS_NAME, CAN_USE_CAM, CAN_USE_CAP, GET_QR_CODE_TYPE_COUNT);
+    js_code = string.format(js_code, IS_DEBUG, OS_NAME, CAN_USE_HLS, CAN_USE_CAM, CAN_USE_CAP, GET_QR_CODE_TYPE_COUNT);
     js_code = trim(js_code);
     local file = io.open("./src/lib/commands/constants.ts", "w");
     if file then
@@ -137,9 +139,10 @@ if not IsInArray(PROFILE, __PROFILE) then
     UNPACK_INDEX = UNPACK_INDEX - 1;
 end
 IS_DEBUG = PROFILE == "debug"
+CAN_USE_HLS = IsInArray(OS_NAME, { "windows", "android" });
 CAN_USE_CAM = IsInArray(OS_NAME, { "android", "ios" });
 CAN_USE_CAP = IsInArray(OS_NAME, { "windows", "macos", "linux" });
-GET_QR_CODE_TYPE_COUNT = B2N(CAN_USE_CAM) + B2N(CAN_USE_CAP);
+GET_QR_CODE_TYPE_COUNT = B2N(CAN_USE_CAM) + B2N(CAN_USE_CAP) + B2N(CAN_USE_HLS);
 
 ConstantsGen();
 CMD = GetCmd();
