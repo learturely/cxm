@@ -13,10 +13,10 @@ keyProperties.load(FileInputStream(keyPropertiesFile))
 
 android {
     compileSdk = 33
-    namespace = "rt.lea.csm"
+    namespace = "up.workso.csm"
     defaultConfig {
         manifestPlaceholders["usesCleartextTraffic"] = "true"
-        applicationId = "rt.lea.csm"
+        applicationId = "up.workso.csm"
         minSdk = 24
         targetSdk = 33
         versionCode = 1

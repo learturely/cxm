@@ -1,7 +1,7 @@
 {
   "productName": "csm",
   "version": "0.0.0",
-  "identifier": "rt.lea.csm",
+  "identifier": "up.workso.csm",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:5173",
