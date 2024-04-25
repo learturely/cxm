@@ -21,7 +21,7 @@
   }
 </script>
 
-{#if state == Page.courseSigns}
+{#if state === Page.courseSigns}
   <div class="items-center justify-center">
     <ScrollArea class="h-[77.5vh] rounded-md border mb-2">
       <Table.Root>

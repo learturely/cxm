@@ -81,7 +81,7 @@
       </RadioGroup.Root>
     {/if}
     <Button
-      disabled={qrCodeGetterCount == 0}
+      disabled={qrCodeGetterCount === 0}
       on:click={async () => {
         await qrCodeSign();
       }}

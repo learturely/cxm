@@ -1,7 +1,6 @@
 <script lang="ts">
   import { ScrollArea } from "$lib/components/ui/scroll-area/index.js";
   import * as Table from "$lib/components/ui/table/index.js";
-  import { cancel } from "@tauri-apps/plugin-barcode-scanner";
   import { Button } from "$lib/components/ui/button/index.js";
   import type { RawSign, RawSignPair } from "./commands/sign";
   import SignLayout from "./sign/SignLayout.svelte";
@@ -28,7 +27,7 @@
   }
 </script>
 
-{#if state == Page.home}
+{#if state === Page.home}
   <div class="items-center justify-center">
     <ScrollArea class="h-[77.5vh] rounded-md border mb-2">
       <Table.Root>

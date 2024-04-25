@@ -72,7 +72,7 @@
         on:input={toggleBtn}
       />
       <div class="flex justify-center items-center">
-        {#if errorMsg != ""}
+        {#if errorMsg !== ""}
           <p class="text-sm text-red-600">
             {errorMsg}
           </p>

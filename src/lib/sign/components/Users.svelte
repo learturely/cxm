@@ -4,14 +4,14 @@
   import * as Table from "$lib/components/ui/table/index.js";
   import { Checkbox } from "$lib/components/ui/checkbox";
   import { Label } from "$lib/components/ui/label";
-  import { isStringEmpty, type AccountPair } from "$lib/commands/account";
+  import { type AccountPair } from "$lib/commands/account";
   import { addUnames, clearUnames } from "$lib/commands/sign";
   import { listen, type UnlistenFn } from "@tauri-apps/api/event";
   import { onDestroy, onMount } from "svelte";
   export let unames: Set<string> = new Set([]);
   export let accounts: AccountPair[] = [];
   export let disabled = false;
-  let unlistenSucess: UnlistenFn, unlistenFail: UnlistenFn;
+  let unlistenSusses: UnlistenFn, unlistenFail: UnlistenFn;
   let resultsFailedCount = 0;
   for (const account of accounts) {
     unames.add(account.uname);
@@ -50,7 +50,7 @@
         p.className = "text-right truncate";
       }, 2500);
     });
-    [unlistenSucess, unlistenFail] = await Promise.all([sucess, fail]);
+    [unlistenSusses, unlistenFail] = await Promise.all([sucess, fail]);
   }
   function removeOrAddElement(uname: string) {
     if (unames.has(uname)) {
@@ -68,7 +68,7 @@
   onMount(listenSignResults);
   onDestroy(() => {
     unlistenFail();
-    unlistenSucess();
+    unlistenSusses();
   });
 </script>
 

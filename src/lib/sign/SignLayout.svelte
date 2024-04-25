@@ -58,25 +58,25 @@
 
 <div class="flex-col space-y-2">
   <Users bind:accounts bind:unames bind:disabled={userListDisabled} />
-  {#if signType == SignType.qrcode}
+  {#if signType === SignType.qrcode}
     <QrCode
       bind:state
       bind:scanning
       on:sign={onSign}
     />
-  {:else if signType == SignType.gesture}
+  {:else if signType === SignType.gesture}
     <Gesture
       on:sign={() => {
         userListDisabled = true;
       }}
     />
-  {:else if signType == SignType.location}
+  {:else if signType === SignType.location}
     <Location
       on:sign={() => {
         userListDisabled = true;
       }}
     />
-  {:else if signType == SignType.signcode}
+  {:else if signType === SignType.signcode}
     <Signcode
       on:sign={() => {
         userListDisabled = true;

@@ -48,13 +48,12 @@ function ConstantsGen()
         return s:match "^%s*(.-)%s*$"
     end
     local js_code = [[
-export const IS_DEBUG: boolean = %s;
 export const OS_NAME: string = "%s";
 export const CAN_USE_CAM: boolean = %s;
 export const CAN_USE_CAP: boolean = %s;
 export const GET_QR_CODE_TYPE_COUNT: number = %d;
     ]];
-    js_code = string.format(js_code, IS_DEBUG, OS_NAME, CAN_USE_CAM, CAN_USE_CAP, GET_QR_CODE_TYPE_COUNT);
+    js_code = string.format(js_code, OS_NAME, CAN_USE_CAM, CAN_USE_CAP, GET_QR_CODE_TYPE_COUNT);
     js_code = trim(js_code);
     local file = io.open("./src/lib/commands/constants.ts", "w");
     if file then

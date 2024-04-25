@@ -3,7 +3,6 @@ import {
   CAN_USE_CAM,
   CAN_USE_CAP,
   GET_QR_CODE_TYPE_COUNT,
-  IS_DEBUG,
   OS_NAME,
 } from "./constants";
 export enum Page {
@@ -46,9 +45,6 @@ export async function scanImage(
     h,
     imageBuffer: Array.from(imageBuffer),
   });
-}
-export function isDebug(): boolean {
-  return IS_DEBUG;
 }
 export function osName(): string {
   return OS_NAME;

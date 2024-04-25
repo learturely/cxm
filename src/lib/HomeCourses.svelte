@@ -19,7 +19,7 @@
   export let scanning = false;
 </script>
 
-{#if state == Page.home}
+{#if state === Page.home}
   <div class="items-center justify-center">
     <ScrollArea class="h-[77.5vh] rounded-md border mb-2">
       <Table.Root>
