@@ -30,6 +30,7 @@
   let coursesUpdating = true;
   let signsUpdating = true;
   let usersUpdating = true;
+  let firstLogin = false
   window.history.replaceState({ state: Page.home }, "");
   window.onpopstate = (ev: { state: { state: Page } }) => {
     let s = ev.state.state;
