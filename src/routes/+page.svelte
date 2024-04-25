@@ -26,7 +26,7 @@
   let signs: RawSignPair[] = [];
   let scanning: boolean = false;
   let unames = new Set<string>();
-  let updateing = [true, true, true];
+  let firstLogin = false;
   let coursesUpdating = true;
   let signsUpdating = true;
   let usersUpdating = true;
@@ -42,6 +42,7 @@
   hasAccounts().then(async (data) => {
     let hasAccounts = data;
     if (!hasAccounts) {
+      firstLogin = true;
       state = Page.login;
       window.history.replaceState(
         { state: Page.login },
@@ -154,6 +155,7 @@
   </Tabs.Root>
 {:else}
   <Login
+    bind:firstLogin
     on:login={async () => {
       await updateAccounts();
       await updateSigns();

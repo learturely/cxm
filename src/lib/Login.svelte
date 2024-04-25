@@ -7,7 +7,7 @@
   let uname = "";
   let pwd = "";
   const dispatch = createEventDispatcher();
-  export let fristLogin = false;
+  export let firstLogin = false;
   let btnDisable = true;
   async function toggleBtn() {
     btnDisable =
@@ -26,8 +26,10 @@
         loginOk = true;
         uname = "";
         errorMsg = "";
-        if (!fristLogin) {
+        if (!firstLogin) {
           window.history.back();
+        } else {
+          firstLogin = false;
         }
         dispatch("login");
       } else {
@@ -45,11 +47,7 @@
       target="_blank"
       class="flex items-center"
     >
-      <img
-        src={cxsignLogo}
-        class="logo mb-6 flex-row"
-        alt="Welcome to CSM!"
-      />
+      <img src={cxsignLogo} class="logo mb-6 flex-row" alt="Welcome to CSM!" />
     </a>
   </div>
   <form on:submit|preventDefault={onSubmit}>
