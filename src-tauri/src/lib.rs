@@ -25,13 +25,15 @@ use std::sync::Mutex;
 use tauri::Manager;
 
 use command::*;
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     env_logger::init();
+    cxsign::utils::set_boxed_location_preprocessor(Box::new(xdsign_data::LocationPreprocessor));
     #[cfg(mobile)]
-    let default_builder = tauri::Builder::default().plugin(tauri_plugin_barcode_scanner::init());
+        let default_builder = tauri::Builder::default().plugin(tauri_plugin_barcode_scanner::init());
     #[cfg(not(mobile))]
-    let default_builder = tauri::Builder::default();
+        let default_builder = tauri::Builder::default();
     // #[cfg(target_os = "android")]
     // let default_builder = default_builder.plugin(file_picker_android::init());
     // #[cfg(not(target_os = "android"))]
@@ -39,14 +41,14 @@ pub fn run() {
     default_builder
         .setup(|app| {
             #[cfg(mobile)]
-            let dir = {
+                let dir = {
                 let config_dir = app
                     .path()
                     .resolve("", tauri::path::BaseDirectory::AppLocalData)?;
                 cxsign::utils::Dir::from(config_dir)
             };
             #[cfg(not(mobile))]
-            let dir = cxsign::utils::DIR.clone();
+                let dir = cxsign::utils::DIR.clone();
             app.manage(dir.clone());
             let db = cxsign::store::DataBase::new(dir);
             db.add_table::<AccountTable>();
@@ -100,6 +102,7 @@ pub fn run() {
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
+
 #[cfg(test)]
 mod test {
     #[test]
