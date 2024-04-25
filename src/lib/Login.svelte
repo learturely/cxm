@@ -1,5 +1,5 @@
 <script lang="ts">
-  import cxsignLogo from "$lib/icons/cxsign.svg";
+  import xddccLogo from "$lib/icons/xddcc.svg";
   import { Button } from "$lib/components/ui/button";
   import { addAccount, isStringEmpty } from "./commands/account";
   import { Input } from "$lib/components/ui/input/index.js";
@@ -7,7 +7,7 @@
   let uname = "";
   let pwd = "";
   const dispatch = createEventDispatcher();
-  export let firstLogin = false;
+  export let fristLogin = false;
   let btnDisable = true;
   async function toggleBtn() {
     btnDisable =
@@ -26,10 +26,8 @@
         loginOk = true;
         uname = "";
         errorMsg = "";
-        if (!firstLogin) {
+        if (!fristLogin) {
           window.history.back();
-        } else {
-          firstLogin = false;
         }
         dispatch("login");
       } else {
@@ -43,11 +41,15 @@
 <div class="flex-col items-center justify-center max-w-70">
   <div class="flex justify-center items-center">
     <a
-      href="https://github.com/worksoup/csm"
+      href="https://github.com/learturely/cxm"
       target="_blank"
       class="flex items-center"
     >
-      <img src={cxsignLogo} class="logo mb-6 flex-row" alt="Welcome to CSM!" />
+      <img
+        src={xddccLogo}
+        class="logo mb-6 flex-row"
+        alt="Welcome to CXM!"
+      />
     </a>
   </div>
   <form on:submit|preventDefault={onSubmit}>
@@ -72,7 +74,7 @@
         on:input={toggleBtn}
       />
       <div class="flex justify-center items-center">
-        {#if errorMsg !== ""}
+        {#if errorMsg != ""}
           <p class="text-sm text-red-600">
             {errorMsg}
           </p>

@@ -1061,7 +1061,6 @@ dependencies = [
  "tauri-plugin-shell",
  "ureq",
  "xcap",
- "xdsign_data",
 ]
 
 [[package]]
@@ -5646,11 +5645,11 @@ checksum = "8ecb6da28b8a351d773b68d5825ac39017e680750f980f3a1a85cd8dd28a47c1"
 
 [[package]]
 name = "ureq"
-version = "2.9.7"
+version = "2.9.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d11a831e3c0b56e438a28308e7c810799e3c118417f342d30ecec080105395cd"
+checksum = "11f214ce18d8b2cbe84ed3aa6486ed3f5b285cf8d8fbdbce9f3f767a724adc35"
 dependencies = [
- "base64 0.22.0",
+ "base64 0.21.7",
  "cookie",
  "cookie_store",
  "flate2",
@@ -6490,17 +6489,6 @@ checksum = "21e5a325c3cb8398ad6cf859c1135b25dd29e186679cf2da7581d9679f63b38e"
 dependencies = [
  "libc",
  "winapi",
-]
-
-[[package]]
-name = "xdsign_data"
-version = "0.1.0"
-source = "git+https://github.com/learturely/xdsign_data.git#b703147dc983cdeb5203e521fe89d610a73d520f"
-dependencies = [
- "cxsign",
- "lazy_static",
- "serde",
- "serde_json",
 ]
 
 [[package]]

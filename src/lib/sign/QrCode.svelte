@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Input } from "$lib/components/ui/input/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
+  import { Switch } from "$lib/components/ui/switch/index.js";
   import { emit } from "@tauri-apps/api/event";
   import M3u8Video from "./components/M3u8Video.svelte";
   import ListRooms from "./components/ListRoom.svelte";
@@ -116,8 +117,8 @@
       </RadioGroup.Root>
     {/if}
     <Button
-      disabled={qrCodeGetterCount === 0 ||
-        (getQrCodeType === "live" && state !== Page.livePlayer)}
+      disabled={qrCodeGetterCount == 0 ||
+        (getQrCodeType == "live" && state != Page.livePlayer)}
       on:click={async () => {
         await qrCodeSign();
       }}
@@ -125,8 +126,8 @@
       签到
     </Button>
   </div>
-  {#if getQrCodeType === "live" && useHls}
-    {#if state === Page.livePlayer}
+  {#if getQrCodeType == "live" && useHls}
+    {#if state == Page.livePlayer}
       <M3u8Video bind:this={videoPlayer} {src} />
     {:else}
       <ListRooms
