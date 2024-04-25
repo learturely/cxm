@@ -1,6 +1,6 @@
 use std::collections::hash_map::OccupiedError;
 
-use cxsign_internal::Course;
+use cxsign::Course;
 use serde::Serialize;
 
 use crate::{AccountPair, CoursesState, SessionsState};

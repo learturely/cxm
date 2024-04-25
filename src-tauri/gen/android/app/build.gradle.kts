@@ -13,10 +13,10 @@ keyProperties.load(FileInputStream(keyPropertiesFile))
 
 android {
     compileSdk = 33
-    namespace = "rt.lea.cxsign"
+    namespace = "rt.lea.csm"
     defaultConfig {
         manifestPlaceholders["usesCleartextTraffic"] = "true"
-        applicationId = "rt.lea.cxsign"
+        applicationId = "rt.lea.csm"
         minSdk = 24
         targetSdk = 33
         versionCode = 1

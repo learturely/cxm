@@ -4,7 +4,7 @@ use std::{
     sync::Arc,
 };
 
-use cxsign_internal::{
+use cxsign::{
     store::{tables::ExcludeTable, DataBaseTableTrait},
     Activity, Course, DefaultGestureOrSigncodeSignner, DefaultLocationSignner,
     DefaultNormalOrRawSignner, DefaultPhotoSignner, RawSign, Session, Sign, SignResult, SignTrait,

@@ -3,7 +3,7 @@ use std::{
     sync::{Arc, Mutex},
 };
 
-use cxsign_internal::{
+use cxsign::{
     store::{tables::LocationTable, DataBase, DataBaseTableTrait},
     Error, Location, LocationWithRange, QrCodeSign, Session, SignResult, SignTrait, SignnerTrait,
 };
@@ -67,7 +67,7 @@ impl<'l> SignnerTrait<QrCodeSign> for TauriQrCodeSignner {
                     }
                     let crate::LocationSignnerInfo { location_str } = p.payload().parse().unwrap();
                     let mut preset_location = preset_location.lock().unwrap().to_location();
-                    match cxsign_internal::utils::location_str_to_location(
+                    match cxsign::utils::location_str_to_location(
                         &db.lock().unwrap(),
                         &location_str,
                     ) {
@@ -108,7 +108,7 @@ impl<'l> SignnerTrait<QrCodeSign> for TauriQrCodeSignner {
                         }
                         let crate::LocationSignnerInfo { location_str } =
                             p.payload().parse().unwrap();
-                        match cxsign_internal::utils::location_str_to_location(
+                        match cxsign::utils::location_str_to_location(
                             &db.lock().unwrap(),
                             &location_str,
                         ) {
@@ -135,7 +135,7 @@ impl<'l> SignnerTrait<QrCodeSign> for TauriQrCodeSignner {
                         }
                         let crate::LocationSignnerInfo { location_str } =
                             p.payload().parse().unwrap();
-                        match cxsign_internal::utils::location_str_to_location(
+                        match cxsign::utils::location_str_to_location(
                             &db.lock().unwrap(),
                             &location_str,
                         ) {

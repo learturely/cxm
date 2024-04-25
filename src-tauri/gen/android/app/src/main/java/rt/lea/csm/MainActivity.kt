@@ -1,3 +1,3 @@
-package rt.lea.cxsign
+package rt.lea.csm
 
 class MainActivity : TauriActivity()

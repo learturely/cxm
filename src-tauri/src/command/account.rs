@@ -1,4 +1,4 @@
-use cxsign_internal::{
+use cxsign::{
     store::{tables::AccountTable, DataBaseTableTrait},
     Session,
 };
@@ -14,7 +14,7 @@ pub async fn has_accounts(db_state: tauri::State<'_, DataBaseState>) -> Result<b
 }
 #[tauri::command]
 pub async fn get_config_dir(
-    dir_state: tauri::State<'_, cxsign_internal::utils::Dir>,
+    dir_state: tauri::State<'_, cxsign::utils::Dir>,
 ) -> Result<String, String> {
     Ok(dir_state.get_config_dir().to_str().unwrap_or("").to_owned())
 }
@@ -23,17 +23,17 @@ pub async fn add_account(
     uname: String,
     pwd: String,
     db_state: tauri::State<'_, DataBaseState>,
-    dir_state: tauri::State<'_, cxsign_internal::utils::Dir>,
+    dir_state: tauri::State<'_, cxsign::utils::Dir>,
     sessions_state: tauri::State<'_, SessionsState>,
 ) -> Result<(), String> {
     let db = db_state.0.lock().unwrap();
-    let enc_pwd = cxsign_internal::utils::des_enc(&pwd);
+    let enc_pwd = cxsign::utils::des_enc(&pwd);
     let session =
-        Session::login(&dir_state, &uname, &enc_pwd).map_err(|e: cxsign_internal::Error| {
+        Session::login(&dir_state, &uname, &enc_pwd).map_err(|e: cxsign::Error| {
             eprint!("添加账号错误！");
             match e {
-                cxsign_internal::Error::LoginError(e) => e,
-                cxsign_internal::Error::AgentError(e) => e.to_string(),
+                cxsign::Error::LoginError(e) => e,
+                cxsign::Error::AgentError(e) => e.to_string(),
                 _ => unreachable!(),
             }
         })?;
@@ -51,7 +51,7 @@ pub async fn add_account(
 pub async fn refresh_accounts(
     unames: Vec<String>,
     db_state: tauri::State<'_, DataBaseState>,
-    dir_state: tauri::State<'_, cxsign_internal::utils::Dir>,
+    dir_state: tauri::State<'_, cxsign::utils::Dir>,
     sessions_state: tauri::State<'_, SessionsState>,
 ) -> Result<(), String> {
     let db = db_state.0.lock().unwrap();

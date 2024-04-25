@@ -3,8 +3,8 @@ use std::{
     sync::{atomic::AtomicBool, Arc, Mutex},
 };
 
-use cxsign_internal::{store::DataBase, Course};
-use cxsign_internal::{Session, Sign};
+use cxsign::{store::DataBase, Course};
+use cxsign::{Session, Sign};
 
 use crate::AccountPair;
 

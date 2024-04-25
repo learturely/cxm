@@ -1,4 +1,4 @@
-/src/main/java/rt/lea/cxsign/generated
+/src/main/java/rt/lea/csm/generated
 /src/main/jniLibs/**/*.so
 /src/main/assets/tauri.conf.json
 /tauri.build.gradle.kts

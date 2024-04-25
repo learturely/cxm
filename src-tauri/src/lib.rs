@@ -10,11 +10,11 @@ mod signner;
 mod state;
 mod tools;
 
-use cxsign_internal::store::tables::AccountTable;
-use cxsign_internal::store::tables::AliasTable;
-use cxsign_internal::store::tables::CourseTable;
-use cxsign_internal::store::tables::ExcludeTable;
-use cxsign_internal::store::tables::LocationTable;
+use cxsign::store::tables::AccountTable;
+use cxsign::store::tables::AliasTable;
+use cxsign::store::tables::CourseTable;
+use cxsign::store::tables::ExcludeTable;
+use cxsign::store::tables::LocationTable;
 use log::{debug, info, trace};
 use state::*;
 use std::sync::Arc;
@@ -40,12 +40,12 @@ pub fn run() {
                 let config_dir = app
                     .path()
                     .resolve("", tauri::path::BaseDirectory::AppLocalData)?;
-                cxsign_internal::utils::Dir::from(config_dir)
+                cxsign::utils::Dir::from(config_dir)
             };
             #[cfg(not(mobile))]
-            let dir = cxsign_internal::utils::DIR.clone();
+            let dir = cxsign::utils::DIR.clone();
             app.manage(dir.clone());
-            let db = cxsign_internal::store::DataBase::new(dir);
+            let db = cxsign::store::DataBase::new(dir);
             db.add_table::<AccountTable>();
             db.add_table::<CourseTable>();
             db.add_table::<ExcludeTable>();

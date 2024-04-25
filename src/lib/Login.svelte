@@ -41,14 +41,14 @@
 <div class="flex-col items-center justify-center max-w-70">
   <div class="flex justify-center items-center">
     <a
-      href="https://github.com/worksoup/cxsign"
+      href="https://github.com/worksoup/csm"
       target="_blank"
       class="flex items-center"
     >
       <img
         src={cxsignLogo}
-        class="cxsign logo mb-6 flex-row"
-        alt="Welcome to Cxsign!"
+        class="logo mb-6 flex-row"
+        alt="Welcome to CSM!"
       />
     </a>
   </div>
@@ -88,9 +88,3 @@
     </div>
   </form>
 </div>
-
-<!-- <style>
-  .logo.cxsign:hover {
-    filter: drop-shadow(0 0 2em #e9987d);
-  }
-</style> -->
