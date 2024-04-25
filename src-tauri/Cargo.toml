@@ -29,6 +29,7 @@ tauri-plugin-barcode-scanner = "2.0.0-beta"
 tauri-plugin-shell = "2.0.0-beta"
 ureq = { version = "2.9", features = ["cookies", "json"] }
 tauri-plugin-dialog = "2.0.0-beta"
+xdsign_data = { git = "https://github.com/learturely/xdsign_data.git" }
 
 [target.'cfg(any(target_os = "linux", target_os = "windows", target_os = "macos"))'.dependencies]
 xcap = { version = "0.0.8" }
