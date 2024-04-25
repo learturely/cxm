@@ -12,7 +12,7 @@ pub async fn scan_image(w: u32, h: u32, image_buffer: Vec<u8>) -> Result<String,
         image::DynamicImage::from(image),
         &mut std::collections::HashMap::new(),
     )
-    .map_err(|err| err.to_string())?;
+        .map_err(|err| err.to_string())?;
     for r in &r {
         let url = r.getText();
         // 如果符合要求的二维码。

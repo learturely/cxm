@@ -1,3 +1,3 @@
-package up.workso.csm
+package rt.lea.cxm
 
 class MainActivity : TauriActivity()

@@ -15,7 +15,8 @@
   import HomeSigns from "$lib/HomeSigns.svelte";
   import { listAllActivities, type RawSignPair } from "$lib/commands/sign";
   import HomeCourses from "$lib/HomeCourses.svelte";
-  import { Page } from "$lib/commands/tools";
+  import HomeTest from "$lib/HomeTest.svelte";
+  import { isDebug, Page } from "$lib/commands/tools";
   import { cancel } from "@tauri-apps/plugin-barcode-scanner";
   import HomeUsers from "$lib/HomeUsers.svelte";
   import Login from "$lib/Login.svelte";
@@ -26,7 +27,6 @@
   let signs: RawSignPair[] = [];
   let scanning: boolean = false;
   let unames = new Set<string>();
-  let updateing = [true, true, true];
   let coursesUpdating = true;
   let signsUpdating = true;
   let usersUpdating = true;
@@ -54,6 +54,7 @@
       signsUpdating = false;
     }
   });
+  const debug = isDebug();
   async function updateCourses() {
     coursesUpdating = true;
     await loadCourses();
@@ -113,6 +114,9 @@
           on:updateAccounts={updateAccounts}
         />
       </Tabs.Content>
+      {#if debug}
+        <Tabs.Content value="test"><HomeTest {unames} /></Tabs.Content>
+      {/if}
     </div>
     {#if state == Page.home}
       <div class="flex justify-center">
@@ -148,6 +152,9 @@
           >
             用户
           </Tabs.Trigger>
+          {#if debug}
+            <Tabs.Trigger value="test">测试</Tabs.Trigger>
+          {/if}
         </Tabs.List>
       </div>
     {/if}

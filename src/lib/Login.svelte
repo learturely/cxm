@@ -1,5 +1,5 @@
 <script lang="ts">
-  import cxsignLogo from "$lib/icons/cxsign.svg";
+  import xddccLogo from "$lib/icons/xddcc.svg";
   import { Button } from "$lib/components/ui/button";
   import { addAccount, isStringEmpty } from "./commands/account";
   import { Input } from "$lib/components/ui/input/index.js";
@@ -41,14 +41,14 @@
 <div class="flex-col items-center justify-center max-w-70">
   <div class="flex justify-center items-center">
     <a
-      href="https://github.com/worksoup/csm"
+      href="https://github.com/learturely/cxm"
       target="_blank"
       class="flex items-center"
     >
       <img
-        src={cxsignLogo}
+        src={xddccLogo}
         class="logo mb-6 flex-row"
-        alt="Welcome to CSM!"
+        alt="Welcome to CXM!"
       />
     </a>
   </div>
