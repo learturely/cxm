@@ -3,7 +3,7 @@ import {
   CAN_USE_CAM,
   CAN_USE_CAP,
   CAN_USE_HLS,
-  GET_QR_CODE_TYPE_COUNT,
+  GET_QR_CODE_TYPE_COUNT, IS_DEBUG,
   OS_NAME,
 } from "./constants";
 
@@ -55,6 +55,9 @@ export async function scanImage(
     h,
     imageBuffer: Array.from(imageBuffer),
   });
+}
+export function isDebug(): boolean {
+  return IS_DEBUG;
 }
 export function osName(): string {
   return OS_NAME;
