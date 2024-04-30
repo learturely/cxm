@@ -30,8 +30,8 @@
           window.location.reload();
         } else {
           firstLogin = false;
+          dispatch("login");
         }
-        dispatch("login");
       } else {
         errorMsg = r.errMsg;
         btnDisable = false;
