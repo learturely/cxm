@@ -26,8 +26,10 @@
         loginOk = true;
         uname = "";
         errorMsg = "";
-        if (!fristLogin) {
-          window.history.back();
+        if (!firstLogin) {
+          window.location.reload();
+        } else {
+          firstLogin = false;
         }
         dispatch("login");
       } else {
