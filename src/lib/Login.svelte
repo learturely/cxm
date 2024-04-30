@@ -7,7 +7,7 @@
   let uname = "";
   let pwd = "";
   const dispatch = createEventDispatcher();
-  export let fristLogin = false;
+  export let firstLogin = false;
   let btnDisable = true;
   async function toggleBtn() {
     btnDisable =
@@ -76,7 +76,7 @@
         on:input={toggleBtn}
       />
       <div class="flex justify-center items-center">
-        {#if errorMsg != ""}
+        {#if errorMsg !== ""}
           <p class="text-sm text-red-600">
             {errorMsg}
           </p>
