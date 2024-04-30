@@ -27,7 +27,7 @@
         uname = "";
         errorMsg = "";
         if (!firstLogin) {
-          window.history.back();
+          window.location.reload();
         } else {
           firstLogin = false;
         }
