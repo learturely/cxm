@@ -1,5 +1,3 @@
-use std::collections::hash_map::OccupiedError;
-
 use cxsign::Course;
 use serde::Serialize;
 
@@ -21,18 +19,13 @@ pub async fn load_courses(
 ) -> Result<(), String> {
     let sessions = sessions_state.0.lock().unwrap();
     let mut courses = courses_state.0.lock().unwrap();
-    for (_, session) in sessions.iter() {
-        let courses_ = Course::get_courses(session).map_err(|e| e.to_string())?;
-        let account = AccountPair::from(session);
-        for course in courses_ {
-            if let Err(OccupiedError {
-                mut entry,
-                mut value,
-            }) = courses.try_insert(course, vec![account.clone()])
-            {
-                entry.get_mut().push(value.pop().unwrap());
-            }
-        }
+    courses.clear();
+    let courses_ = Course::get_courses(sessions.values()).map_err(|e| e.to_string())?;
+    for (course, accounts) in courses_ {
+        courses.insert(
+            course,
+            accounts.into_iter().map(AccountPair::from).collect(),
+        );
     }
     Ok(())
 }
