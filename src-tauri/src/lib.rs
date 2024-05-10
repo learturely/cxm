@@ -18,7 +18,7 @@ use cxsign::store::tables::AliasTable;
 use cxsign::store::tables::CourseTable;
 use cxsign::store::tables::ExcludeTable;
 use cxsign::store::tables::LocationTable;
-use log::{debug, info, trace};
+use log::{debug, error, info, trace};
 use state::*;
 use std::sync::Arc;
 use std::sync::Mutex;
@@ -29,7 +29,8 @@ use command::*;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     env_logger::init();
-    cxsign::utils::set_boxed_location_preprocessor(Box::new(xdsign_data::LocationPreprocessor));
+    cxsign::utils::set_boxed_location_preprocessor(Box::new(xdsign_data::LocationPreprocessor))
+        .unwrap_or_else(|e| error!("{e}"));
     #[cfg(mobile)]
         let default_builder = tauri::Builder::default().plugin(tauri_plugin_barcode_scanner::init());
     #[cfg(not(mobile))]

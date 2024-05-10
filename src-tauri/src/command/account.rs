@@ -1,6 +1,6 @@
 use cxsign::{
     store::{tables::AccountTable, DataBaseTableTrait},
-    Session,
+    Session, UnameAndEncPwdPair,
 };
 use serde::{Deserialize, Serialize};
 
@@ -30,15 +30,14 @@ pub async fn add_account(
 ) -> Result<(), String> {
     let db = db_state.0.lock().unwrap();
     let enc_pwd = cxsign::utils::des_enc(&pwd);
-    let session =
-        Session::login(&dir_state, &uname, &enc_pwd).map_err(|e: cxsign::Error| {
-            eprint!("添加账号错误！");
-            match e {
-                cxsign::Error::LoginError(e) => e,
-                cxsign::Error::AgentError(e) => e.to_string(),
-                _ => unreachable!(),
-            }
-        })?;
+    let session = Session::login(&dir_state, &uname, &enc_pwd).map_err(|e: cxsign::Error| {
+        eprint!("添加账号错误！");
+        match e {
+            cxsign::Error::LoginError(e) => e,
+            cxsign::Error::AgentError(e) => e.to_string(),
+            _ => unreachable!(),
+        }
+    })?;
     let name = session.get_stu_name();
     let table = AccountTable::from_ref(&db);
     table.add_account_or(&uname, &enc_pwd, name, AccountTable::update_account);
@@ -60,7 +59,7 @@ pub async fn refresh_accounts(
     let db = db_state.0.lock().unwrap();
     let table = AccountTable::from_ref(&db);
     for uname in unames {
-        if let Some((uname, (enc_pwd, _))) = table.get_account(&uname) {
+        if let Some((UnameAndEncPwdPair { uname, enc_pwd }, _)) = table.get_account(&uname) {
             table.delete_account(&uname);
             sessions_state
                 .0
