@@ -6,9 +6,9 @@ use std::{
 
 use cxsign::{
     store::{tables::ExcludeTable, DataBaseTableTrait},
-    Activity, Course, DefaultGestureOrSigncodeSignner, DefaultLocationSignner,
-    DefaultNormalOrRawSignner, DefaultPhotoSignner, RawSign, Session, Sign, SignResult, SignTrait,
-    SignnerTrait,
+    Activity, Course, DefaultGestureOrSigncodeSignner, DefaultLocationInfoGetter,
+    DefaultLocationSignner, DefaultNormalOrRawSignner, DefaultPhotoSignner, RawSign, Session, Sign,
+    SignResult, SignTrait, SignnerTrait,
 };
 use log::{info, warn};
 use serde::{Deserialize, Serialize};
@@ -247,12 +247,14 @@ pub async fn sign_single(
                     let LocationSignnerInfo { location_str } = p.payload().parse().unwrap();
                     let unames = unames.lock().unwrap();
                     let sessions = sessions.lock().unwrap();
-                    if let Ok(results) =
-                        DefaultLocationSignner::new(&db.lock().unwrap(), &location_str).sign(
-                            sign,
-                            sessions.iter().filter(|a| unames.contains(a.get_uname())),
-                        )
-                    {
+                    if let Ok(results) = DefaultLocationSignner::new(
+                        DefaultLocationInfoGetter::from(&*db.lock().unwrap()),
+                        &location_str,
+                    )
+                    .sign(
+                        sign,
+                        sessions.iter().filter(|a| unames.contains(a.get_uname())),
+                    ) {
                         handle_results(results, &app_handle_)
                     }
                 });

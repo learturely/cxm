@@ -12,7 +12,6 @@ mod tools;
 
 use cxsign::store::tables::AccountTable;
 use cxsign::store::tables::AliasTable;
-use cxsign::store::tables::CourseTable;
 use cxsign::store::tables::ExcludeTable;
 use cxsign::store::tables::LocationTable;
 use log::{debug, info, trace};
@@ -36,18 +35,12 @@ pub fn run() {
     default_builder
         .setup(|app| {
             #[cfg(mobile)]
-            let dir = {
-                let config_dir = app
-                    .path()
-                    .resolve("", tauri::path::BaseDirectory::AppLocalData)?;
-                cxsign::utils::Dir::from(config_dir)
-            };
-            #[cfg(not(mobile))]
-            let dir = cxsign::utils::DIR.clone();
-            app.manage(dir.clone());
-            let db = cxsign::store::DataBase::new(dir);
+            cxsign::utils::Dir::set_config_dir(Box::new(
+                app.path()
+                    .resolve("", tauri::path::BaseDirectory::AppLocalData)?,
+            ));
+            let db = cxsign::store::DataBase::new();
             db.add_table::<AccountTable>();
-            db.add_table::<CourseTable>();
             db.add_table::<ExcludeTable>();
             db.add_table::<AliasTable>();
             db.add_table::<LocationTable>();
