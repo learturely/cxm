@@ -39,6 +39,8 @@ pub fn run() {
                 app.path()
                     .resolve("", tauri::path::BaseDirectory::AppLocalData)?,
             ));
+            #[cfg(not(mobile))]
+            cxsign::utils::Dir::set_config_dir_info("TEST_CSM", "up.workso", "Worksoup", "csm");
             let db = cxsign::store::DataBase::new();
             db.add_table::<AccountTable>();
             db.add_table::<ExcludeTable>();
