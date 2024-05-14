@@ -9,13 +9,13 @@ mod command;
 mod live;
 mod protocol;
 mod room;
+mod location_info_getter;
 mod signner;
 mod state;
 mod tools;
 
 use cxsign::store::tables::AccountTable;
 use cxsign::store::tables::AliasTable;
-use cxsign::store::tables::CourseTable;
 use cxsign::store::tables::ExcludeTable;
 use cxsign::store::tables::LocationTable;
 use log::{debug, error, info, trace};
@@ -29,7 +29,7 @@ use command::*;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     env_logger::init();
-    cxsign::utils::set_boxed_location_preprocessor(Box::new(xdsign_data::LocationPreprocessor))
+    cxsign::Location::set_boxed_location_preprocessor(Box::new(xdsign_data::LocationPreprocessor))
         .unwrap_or_else(|e| error!("{e}"));
     #[cfg(mobile)]
         let default_builder = tauri::Builder::default().plugin(tauri_plugin_barcode_scanner::init());
@@ -42,18 +42,15 @@ pub fn run() {
     default_builder
         .setup(|app| {
             #[cfg(mobile)]
-                let dir = {
-                let config_dir = app
-                    .path()
-                    .resolve("", tauri::path::BaseDirectory::AppLocalData)?;
-                cxsign::utils::Dir::from(config_dir)
-            };
+            cxsign::utils::Dir::set_config_dir(Box::new(
+                app.path()
+                    .resolve("", tauri::path::BaseDirectory::AppLocalData)?
+                    .into(),
+            ));
             #[cfg(not(mobile))]
-                let dir = cxsign::utils::DIR.clone();
-            app.manage(dir.clone());
-            let db = cxsign::store::DataBase::new(dir);
+            cxsign::utils::Dir::set_config_dir_info("TEST_CXSIGN", "up.workso", "Worksoup", "csm");
+            let db = cxsign::store::DataBase::new();
             db.add_table::<AccountTable>();
-            db.add_table::<CourseTable>();
             db.add_table::<ExcludeTable>();
             db.add_table::<AliasTable>();
             db.add_table::<LocationTable>();
