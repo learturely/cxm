@@ -86,7 +86,7 @@ pub fn get_lives_now(
             info!("获取当前：{}", stu_name);
             LiveUrlPair {
                 name: stu_name.to_owned(),
-                room: room.to_room_pair(),
+                room: room.into_room_pair(),
                 live: url,
             }
         })

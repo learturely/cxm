@@ -24,8 +24,9 @@ pub struct Room {
     pub(crate) room_id: i32,
     pub(crate) id: i32,
 }
+
 impl Room {
-    pub fn to_room_pair(self) -> RoomPair {
+    pub fn into_room_pair(self) -> RoomPair {
         RoomPair {
             name: self.name,
             code: self.device_code,
@@ -132,7 +133,7 @@ impl Room {
                             "step1:set-progress",
                             done.load(std::sync::atomic::Ordering::Relaxed) as f32 / total * 100.0,
                         )
-                        .expect("emit `step1:set-progress` failed.");
+                            .expect("emit `step1:set-progress` failed.");
                     }
                 });
                 handles.push(handle);
@@ -195,7 +196,7 @@ impl Room {
                         "step2:set-progress",
                         done.load(std::sync::atomic::Ordering::Relaxed) as f32 / total * 100.0,
                     )
-                    .expect("emit `step2:set-progress` failed.");
+                        .expect("emit `step2:set-progress` failed.");
                 });
                 handles.push(handle)
             }
