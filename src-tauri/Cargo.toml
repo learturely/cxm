@@ -33,7 +33,7 @@ ureq = { version = "2.9", features = ["cookies", "json"] }
 tauri-plugin-dialog = "2.0.0-beta"
 
 [target.'cfg(any(target_os = "linux", target_os = "windows", target_os = "macos"))'.dependencies]
-xcap = { version = "0.0.8" }
+xcap = { version = "0.0.9" }
 
 [profile.release]
 panic = "abort"
