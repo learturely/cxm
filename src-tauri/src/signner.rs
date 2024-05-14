@@ -1,27 +1,45 @@
+use cxsign::{
+    Error, Location, LocationInfoGetterTrait, QrCodeSign, Session, SignResult, SignTrait,
+    SignnerTrait,
+};
 use std::{
     collections::HashMap,
+    marker::PhantomData,
     sync::{Arc, Mutex},
-};
-
-use cxsign::{
-    store::{tables::LocationTable, DataBase, DataBaseTableTrait},
-    Error, Location, LocationWithRange, QrCodeSign, Session, SignResult, SignTrait, SignnerTrait,
 };
 use tauri::{AppHandle, Manager};
 
 use crate::CurrentSignState;
 
-pub struct TauriQrCodeSignner {
+pub struct TauriQrCodeSignner<
+    T1: LocationInfoGetterTrait + Sync + Send + for<'a> From<&'a Arc<Mutex<T2>>>,
+    T2,
+> where
+    Arc<Mutex<T2>>: Sync + Send,
+{
     app_handle: AppHandle,
-    db: Arc<Mutex<DataBase>>,
+    location_info_getter: Arc<Mutex<T2>>,
+    _p: PhantomData<T1>,
 }
-impl TauriQrCodeSignner {
-    pub fn new(db: Arc<Mutex<DataBase>>, app_handle: AppHandle) -> Self {
-        Self { db, app_handle }
+impl<T1: LocationInfoGetterTrait + Sync + Send + for<'a> From<&'a Arc<Mutex<T2>>>, T2>
+    TauriQrCodeSignner<T1, T2>
+where
+    Arc<Mutex<T2>>: Sync + Send,
+{
+    pub fn new(location_info_getter: Arc<Mutex<T2>>, app_handle: AppHandle) -> Self {
+        Self {
+            location_info_getter,
+            app_handle,
+            _p: PhantomData,
+        }
     }
 }
 
-impl<'l> SignnerTrait<QrCodeSign> for TauriQrCodeSignner {
+impl<T1: LocationInfoGetterTrait + Sync + Send + for<'a> From<&'a Arc<Mutex<T2>>>, T2: 'static>
+    SignnerTrait<QrCodeSign> for TauriQrCodeSignner<T1, T2>
+where
+    Arc<Mutex<T2>>: Sync + Send,
+{
     type ExtData<'e> = Location;
 
     fn sign<'a, Sessions: Iterator<Item = &'a Session> + Clone>(
@@ -36,24 +54,19 @@ impl<'l> SignnerTrait<QrCodeSign> for TauriQrCodeSignner {
             .0
             .clone();
         let sessions_lock = sessions.lock().unwrap();
-        let preset_location = sessions_lock
-            .iter()
-            .next()
-            .map(|s| LocationWithRange::from_log(s, &sign.as_inner().course))
-            .transpose()?
-            .map(|mut m| m.remove(&sign.as_inner().active_id))
-            .flatten();
+        let preset_location =
+            T1::from(&self.location_info_getter).get_preset_location(sign.as_location_sign_mut());
         drop(sessions_lock);
         log::info!("获取预设位置。");
         let app_handle_ = self.app_handle.clone();
-        let db = Arc::clone(&self.db);
+        let location_info_getter = Arc::clone(&self.location_info_getter);
         let mut location = Arc::new(Mutex::new(Location::get_none_location()));
         log::info!("初始化位置信息处理程序。");
         let location_info_thread_handle = if let Some(preset_location) = preset_location {
             // global_locations.append(&mut course_locations);
             // let locations = global_locations;
             // let locations = Arc::new(Mutex::new(locations));
-            location = Arc::new(Mutex::new(preset_location.to_shifted_location()));
+            location = Arc::new(Mutex::new(preset_location.clone()));
             let preset_location = Arc::new(Mutex::new(preset_location));
             let location = Arc::clone(&location);
             std::thread::spawn(move || {
@@ -66,34 +79,31 @@ impl<'l> SignnerTrait<QrCodeSign> for TauriQrCodeSignner {
                         return;
                     }
                     let crate::LocationSignnerInfo { location_str } = p.payload().parse().unwrap();
-                    let mut preset_location = preset_location.lock().unwrap().to_location();
-                    match cxsign::utils::location_str_to_location(
-                        &db.lock().unwrap(),
-                        &location_str,
-                    ) {
-                        Ok(位置) => {
-                            preset_location.set_addr(位置.get_addr());
-                            (*location.lock().unwrap()) = 位置;
-                        }
-                        Err(位置字符串) => {
-                            if !位置字符串.is_empty() {
-                                preset_location.set_addr(&位置字符串);
-                            }
-                            (*location.lock().unwrap()) = preset_location;
-                        }
-                    }
+                    let t1 = T1::from(&Arc::clone(&location_info_getter));
+                    if let Some(location_str) = location_str.as_ref() {
+                        t1.map_location_str(location_str).map_or_else(
+                            || {
+                                let mut preset_location = preset_location.lock().unwrap();
+                                if !location_str.is_empty() {
+                                    preset_location.set_addr(location_str);
+                                }
+                                (*location.lock().unwrap()) = preset_location.clone();
+                            },
+                            |location_| {
+                                let mut preset_location = preset_location.lock().unwrap().clone();
+                                preset_location.set_addr(location_.get_addr());
+                                (*location.lock().unwrap()) = location_;
+                            },
+                        )
+                    };
                     log::info!("reserve: `sign:qrcode:location`, end.");
                 });
             })
         } else {
-            let db_ = self.db.lock().unwrap();
-            let table = LocationTable::from_ref(&db_);
-            let mut global_locations = table.get_location_list_by_course(-1);
-            let mut course_locations =
-                table.get_location_list_by_course(sign.as_inner().course.get_id());
-            global_locations.append(&mut course_locations);
-            let locations = global_locations;
-            if let Some(location_) = locations.into_iter().next() {
+            let location_info_getter_ = T1::from(&Arc::clone(&self.location_info_getter));
+            if let Some(location_) =
+                location_info_getter_.get_fallback_location(sign.as_location_sign_mut())
+            {
                 location = Arc::new(Mutex::new(location_.clone()));
                 let location_fallback = location_.clone();
                 let location = Arc::clone(&location);
@@ -108,22 +118,26 @@ impl<'l> SignnerTrait<QrCodeSign> for TauriQrCodeSignner {
                         }
                         let crate::LocationSignnerInfo { location_str } =
                             p.payload().parse().unwrap();
-                        match cxsign::utils::location_str_to_location(
-                            &db.lock().unwrap(),
-                            &location_str,
-                        ) {
-                            Ok(位置) => {
-                                (*location.lock().unwrap()) = 位置;
-                            }
-                            Err(_) => {
-                                (*location.lock().unwrap()) = location_fallback.clone();
-                            }
+                        if let Some(location_str) = location_str.as_ref() {
+                            let location_info_getter_ =
+                                T1::from(&Arc::clone(&location_info_getter));
+                            location_info_getter_
+                                .map_location_str(location_str)
+                                .map_or_else(
+                                    || {
+                                        (*location.lock().unwrap()) = location_fallback.clone();
+                                    },
+                                    |location_| {
+                                        (*location.lock().unwrap()) = location_;
+                                    },
+                                )
                         }
                         log::info!("reserve: `sign:qrcode:location`, end.");
                     });
                 })
             } else {
                 let location = Arc::clone(&location);
+                let location_info_getter = Arc::clone(&self.location_info_getter);
                 std::thread::spawn(move || {
                     let app = app_handle_.clone();
                     app_handle_.listen("sign:qrcode:location", move |p| {
@@ -135,14 +149,16 @@ impl<'l> SignnerTrait<QrCodeSign> for TauriQrCodeSignner {
                         }
                         let crate::LocationSignnerInfo { location_str } =
                             p.payload().parse().unwrap();
-                        match cxsign::utils::location_str_to_location(
-                            &db.lock().unwrap(),
-                            &location_str,
-                        ) {
-                            Ok(位置) => {
-                                (*location.lock().unwrap()) = 位置;
-                            }
-                            _ => {}
+
+                        if let Some(location_str) = location_str.as_ref() {
+                            T1::from(&Arc::clone(&location_info_getter))
+                                .map_location_str(location_str)
+                                .map_or_else(
+                                    || {},
+                                    |location_| {
+                                        (*location.lock().unwrap()) = location_;
+                                    },
+                                )
                         }
                         log::info!("reserve: `sign:qrcode:location`, end.");
                     });
@@ -228,6 +244,6 @@ impl<'l> SignnerTrait<QrCodeSign> for TauriQrCodeSignner {
     ) -> Result<SignResult, Error> {
         let r = sign.pre_sign(session).map_err(Error::from)?;
         sign.set_location(location);
-        Ok(unsafe { sign.sign_unchecked(session, r) }.map_err(Error::from)?)
+        unsafe { sign.sign_unchecked(session, r) }.map_err(Error::from)
     }
 }

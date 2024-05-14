@@ -6,6 +6,7 @@
 #![feature(map_try_insert)]
 
 mod command;
+mod location_info_getter;
 mod signner;
 mod state;
 mod tools;
@@ -37,10 +38,11 @@ pub fn run() {
             #[cfg(mobile)]
             cxsign::utils::Dir::set_config_dir(Box::new(
                 app.path()
-                    .resolve("", tauri::path::BaseDirectory::AppLocalData)?,
+                    .resolve("", tauri::path::BaseDirectory::AppLocalData)?
+                    .into(),
             ));
             #[cfg(not(mobile))]
-            cxsign::utils::Dir::set_config_dir_info("TEST_CSM", "up.workso", "Worksoup", "csm");
+            cxsign::utils::Dir::set_config_dir_info("TEST_CXSIGN", "up.workso", "Worksoup", "csm");
             let db = cxsign::store::DataBase::new();
             db.add_table::<AccountTable>();
             db.add_table::<ExcludeTable>();

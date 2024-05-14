@@ -16,8 +16,7 @@ use tauri::Manager;
 use tauri_plugin_dialog::DialogExt;
 
 use crate::{
-    signner::TauriQrCodeSignner, AccountPair, CurrentSignState, CurrentSignUnamesState,
-    DataBaseState, SessionsState,
+    location_info_getter::TauriLocationInfoGetter, signner::TauriQrCodeSignner, AccountPair, CurrentSignState, CurrentSignUnamesState, DataBaseState, SessionsState
 };
 #[derive(Serialize)]
 pub struct RawSignPair {
@@ -206,7 +205,11 @@ pub async fn sign_single(
                 info!("签到[{sign_name}]为二维码签到。");
                 let mut sign = sign.clone();
                 let sign = &mut sign;
-                let _ = TauriQrCodeSignner::new(Arc::clone(&db), app_handle_.clone())
+                let _ =
+                    TauriQrCodeSignner::<TauriLocationInfoGetter, cxsign::store::DataBase>::new(
+                        Arc::clone(&db),
+                        app_handle_.clone(),
+                    )
                     .sign(sign, None.iter());
             }
             Sign::Gesture(sign) => {
