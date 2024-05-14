@@ -13,22 +13,22 @@ pub async fn has_accounts(db_state: tauri::State<'_, DataBaseState>) -> Result<b
     Ok(!table.get_accounts().is_empty())
 }
 #[tauri::command]
-pub async fn get_config_dir(
-    dir_state: tauri::State<'_, cxsign::utils::Dir>,
-) -> Result<String, String> {
-    Ok(dir_state.get_config_dir().to_str().unwrap_or("").to_owned())
+pub async fn get_config_dir() -> Result<String, String> {
+    Ok(cxsign::utils::Dir::get_config_dir()
+        .to_str()
+        .unwrap_or("")
+        .to_owned())
 }
 #[tauri::command]
 pub async fn add_account(
     uname: String,
     pwd: String,
     db_state: tauri::State<'_, DataBaseState>,
-    dir_state: tauri::State<'_, cxsign::utils::Dir>,
     sessions_state: tauri::State<'_, SessionsState>,
 ) -> Result<(), String> {
     let db = db_state.0.lock().unwrap();
     let enc_pwd = cxsign::utils::des_enc(&pwd);
-    let session = Session::login(&dir_state, &uname, &enc_pwd).map_err(|e: cxsign::Error| {
+    let session = Session::login(&uname, &enc_pwd).map_err(|e: cxsign::Error| {
         eprint!("添加账号错误！");
         match e {
             cxsign::Error::LoginError(e) => e,
@@ -50,7 +50,6 @@ pub async fn add_account(
 pub async fn refresh_accounts(
     unames: Vec<String>,
     db_state: tauri::State<'_, DataBaseState>,
-    dir_state: tauri::State<'_, cxsign::utils::Dir>,
     sessions_state: tauri::State<'_, SessionsState>,
 ) -> Result<(), String> {
     let db = db_state.0.lock().unwrap();
@@ -63,7 +62,7 @@ pub async fn refresh_accounts(
                 .lock()
                 .map_err(|e| e.to_string())?
                 .remove(&uname);
-            if let Ok(session) = Session::login(&dir_state, &uname, &enc_pwd) {
+            if let Ok(session) = Session::login(&uname, &enc_pwd) {
                 let name = session.get_stu_name();
                 table.add_account_or(&uname, &enc_pwd, name, AccountTable::update_account);
                 sessions_state

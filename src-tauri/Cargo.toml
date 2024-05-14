@@ -16,8 +16,9 @@ tauri-build = { version = "2.0.0-beta", features = [] }
 
 [dependencies]
 chrono = "0.4"
-clap = { version = "4.5", features = ["derive"] }
-cxsign = { git = "https://github.com/worksoup/newsign.git" }
+# cxsign = { git = "https://github.com/worksoup/newsign.git" }
+cxsign = { git = "https://github.com/worksoup/newsign.git", branch = "dev-v0.2" }
+# cxsign = { path = "../../newsign/" }
 env_logger = "0.11"
 image = "0.25"
 log = { version = "0.4", features = ["release_max_level_info"] }
@@ -31,7 +32,7 @@ ureq = { version = "2.9", features = ["cookies", "json"] }
 tauri-plugin-dialog = "2.0.0-beta"
 
 [target.'cfg(any(target_os = "linux", target_os = "windows", target_os = "macos"))'.dependencies]
-xcap = { version = "0.0.8" }
+xcap = { version = "0.0.9" }
 
 [profile.release]
 panic = "abort"
