@@ -1,6 +1,9 @@
 use cxsign::{
-    store::{tables::AccountTable, DataBaseTableTrait},
-    Session, UnameAndEncPwdPair,
+    default_impl::store::{AccountTable, UnameAndEncPwdPair},
+    dir::Dir,
+    error::Error,
+    login::utils::des_enc,
+    user::Session,
 };
 use serde::{Deserialize, Serialize};
 
@@ -9,15 +12,11 @@ use crate::state::{DataBaseState, SessionsState};
 #[tauri::command]
 pub async fn has_accounts(db_state: tauri::State<'_, DataBaseState>) -> Result<bool, String> {
     let db = db_state.0.lock().unwrap();
-    let table = AccountTable::from_ref(&db);
-    Ok(!table.get_accounts().is_empty())
+    Ok(!AccountTable::get_accounts(&db).is_empty())
 }
 #[tauri::command]
 pub async fn get_config_dir() -> Result<String, String> {
-    Ok(cxsign::utils::Dir::get_config_dir()
-        .to_str()
-        .unwrap_or("")
-        .to_owned())
+    Ok(Dir::get_config_dir().to_str().unwrap_or("").to_owned())
 }
 #[tauri::command]
 pub async fn add_account(
@@ -27,18 +26,17 @@ pub async fn add_account(
     sessions_state: tauri::State<'_, SessionsState>,
 ) -> Result<(), String> {
     let db = db_state.0.lock().unwrap();
-    let enc_pwd = cxsign::utils::des_enc(&pwd);
-    let session = Session::login(&uname, &enc_pwd).map_err(|e: cxsign::Error| {
+    let enc_pwd = des_enc(&pwd);
+    let session = Session::login(&uname, &enc_pwd).map_err(|e: Error| {
         eprint!("添加账号错误！");
         match e {
-            cxsign::Error::LoginError(e) => e,
-            cxsign::Error::AgentError(e) => e.to_string(),
+            Error::LoginError(e) => e,
+            Error::AgentError(e) => e.to_string(),
             _ => unreachable!(),
         }
     })?;
     let name = session.get_stu_name();
-    let table = AccountTable::from_ref(&db);
-    table.add_account_or(&uname, &enc_pwd, name, AccountTable::update_account);
+    AccountTable::add_account_or(&db, &uname, &enc_pwd, name, AccountTable::update_account);
     sessions_state
         .0
         .lock()
@@ -53,10 +51,11 @@ pub async fn refresh_accounts(
     sessions_state: tauri::State<'_, SessionsState>,
 ) -> Result<(), String> {
     let db = db_state.0.lock().unwrap();
-    let table = AccountTable::from_ref(&db);
     for uname in unames {
-        if let Some((UnameAndEncPwdPair { uname, enc_pwd }, _)) = table.get_account(&uname) {
-            table.delete_account(&uname);
+        if let Some((UnameAndEncPwdPair { uname, enc_pwd }, _)) =
+            AccountTable::get_account(&db, &uname)
+        {
+            AccountTable::delete_account(&db, &uname);
             sessions_state
                 .0
                 .lock()
@@ -64,7 +63,13 @@ pub async fn refresh_accounts(
                 .remove(&uname);
             if let Ok(session) = Session::login(&uname, &enc_pwd) {
                 let name = session.get_stu_name();
-                table.add_account_or(&uname, &enc_pwd, name, AccountTable::update_account);
+                AccountTable::add_account_or(
+                    &db,
+                    &uname,
+                    &enc_pwd,
+                    name,
+                    AccountTable::update_account,
+                );
                 sessions_state
                     .0
                     .lock()
@@ -84,9 +89,8 @@ pub async fn delete_accounts(
     sessions_state: tauri::State<'_, SessionsState>,
 ) -> Result<(), String> {
     let db = db_state.0.lock().unwrap();
-    let table = AccountTable::from_ref(&db);
     for uname in unames {
-        table.delete_account(&uname);
+        AccountTable::delete_account(&db, &uname);
         sessions_state
             .0
             .lock()
@@ -154,9 +158,8 @@ pub async fn load_accounts(
     sessions_state: tauri::State<'_, SessionsState>,
 ) -> Result<(), String> {
     let db = db_state.0.lock().unwrap();
-    let table = AccountTable::from_ref(&db);
     let mut sessions = sessions_state.0.lock().unwrap();
-    let load_sessions = table.get_sessions();
+    let load_sessions = AccountTable::get_sessions(&db);
     for (k, v) in load_sessions {
         sessions.insert(k, v);
     }

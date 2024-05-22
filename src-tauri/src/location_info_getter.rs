@@ -1,8 +1,14 @@
-use cxsign::{
-    store::{tables::LocationTable, DataBase, DataBaseTableTrait},
-    Location, LocationInfoGetterTrait, LocationSign, SignTrait,
-};
 use std::sync::{Arc, Mutex};
+
+use cxsign::{
+    default_impl::{
+        sign::LocationSign,
+        signner::LocationInfoGetterTrait,
+        store::{DataBase, LocationTable},
+    },
+    sign::SignTrait,
+    types::Location,
+};
 pub struct TauriLocationInfoGetter(Arc<Mutex<DataBase>>);
 impl TauriLocationInfoGetter {
     pub fn new(db: &Arc<Mutex<DataBase>>) -> Self {
@@ -22,18 +28,17 @@ impl From<&Arc<Mutex<DataBase>>> for TauriLocationInfoGetter {
 impl LocationInfoGetterTrait for TauriLocationInfoGetter {
     fn map_location_str(&self, location_str: &str) -> Option<Location> {
         let binding = self.0.lock().unwrap();
-        let table = LocationTable::from_ref(&binding);
         let location_str = location_str.trim();
         location_str
             .parse()
             .ok()
-            .or_else(|| table.get_location_by_alias(location_str))
+            .or_else(|| LocationTable::get_location_by_alias(&binding, location_str))
             .or_else(|| {
                 location_str
                     .parse()
                     .map(|location_id| {
-                        if table.has_location(location_id) {
-                            let (_, location) = table.get_location(location_id);
+                        if LocationTable::has_location(&binding, location_id) {
+                            let (_, location) = LocationTable::get_location(&binding, location_id);
                             Some(location)
                         } else {
                             None
@@ -45,10 +50,8 @@ impl LocationInfoGetterTrait for TauriLocationInfoGetter {
     }
     fn get_fallback_location(&self, sign: &LocationSign) -> Option<Location> {
         let binding = self.0.lock().unwrap();
-        let table = LocationTable::from_ref(&binding);
-        table
-            .get_location_list_by_course(sign.as_inner().course.get_id())
+        LocationTable::get_location_list_by_course(&binding, sign.as_inner().course.get_id())
             .pop()
-            .or_else(|| table.get_location_list_by_course(-1).pop())
+            .or_else(|| LocationTable::get_location_list_by_course(&binding, -1).pop())
     }
 }
