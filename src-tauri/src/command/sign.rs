@@ -1,22 +1,31 @@
+use cxsign::{
+    activity::{Activity, RawSign},
+    default_impl::{
+        sign::Sign,
+        signner::{
+            DefaultGestureOrSigncodeSignner, DefaultLocationInfoGetter, DefaultLocationSignner,
+            DefaultNormalOrRawSignner, DefaultPhotoSignner,
+        },
+        store::DataBase,
+    },
+    sign::{SignResult, SignTrait},
+    signner::SignnerTrait,
+    types::Course,
+    user::Session,
+};
+use log::{info, warn};
+use serde::{Deserialize, Serialize};
 use std::{
     collections::{HashMap, HashSet},
     str::FromStr,
     sync::Arc,
 };
-
-use cxsign::{
-    store::{tables::ExcludeTable, DataBaseTableTrait},
-    Activity, Course, DefaultGestureOrSigncodeSignner, DefaultLocationInfoGetter,
-    DefaultLocationSignner, DefaultNormalOrRawSignner, DefaultPhotoSignner, RawSign, Session, Sign,
-    SignResult, SignTrait, SignnerTrait,
-};
-use log::{info, warn};
-use serde::{Deserialize, Serialize};
 use tauri::Manager;
 use tauri_plugin_dialog::DialogExt;
 
 use crate::{
-    location_info_getter::TauriLocationInfoGetter, signner::TauriQrCodeSignner, AccountPair, CurrentSignState, CurrentSignUnamesState, DataBaseState, SessionsState
+    location_info_getter::TauriLocationInfoGetter, signner::TauriQrCodeSignner, AccountPair,
+    CurrentSignState, CurrentSignUnamesState, DataBaseState, SessionsState,
 };
 
 #[derive(Serialize)]
@@ -45,12 +54,22 @@ pub async fn list_course_activities(
     sessions_state: tauri::State<'_, SessionsState>,
 ) -> Result<Vec<RawSign>, String> {
     let db = db_state.0.lock().unwrap();
-    let table = ExcludeTable::from_ref(&db);
     let sessions = sessions_state.0.lock().unwrap();
     let r = if let Some((_uname, session)) = sessions.iter().next() {
-        let (v, _, _) =
-            Activity::get_course_activities(table, session, &course).map_err(|e| e.to_string())?;
-        v
+        let v =
+            Activity::get_course_activities(&*db, session, &course).map_err(|e| e.to_string())?;
+        v.into_iter()
+            .filter_map(|sign| match sign {
+                Activity::RawSign(sign) => {
+                    if sign.is_valid() {
+                        Some(sign)
+                    } else {
+                        None
+                    }
+                }
+                Activity::Other(_) => None,
+            })
+            .collect()
     } else {
         vec![]
     };
@@ -63,14 +82,22 @@ pub async fn list_all_activities(
     sessions_state: tauri::State<'_, SessionsState>,
 ) -> Result<Vec<RawSignPair>, String> {
     let db = db_state.0.lock().unwrap();
-    let table = ExcludeTable::from_ref(&db);
     let sessions = sessions_state.0.lock().unwrap();
-    let (r, _, _) =
-        Activity::get_all_activities(table, sessions.values(), false).map_err(|e| e.to_string())?;
+    let r =
+        Activity::get_all_activities(&*db, sessions.values(), false).map_err(|e| e.to_string())?;
     Ok(r.into_iter()
-        .map(|(sign, sessions)| RawSignPair {
-            sign,
-            unames: sessions.into_iter().map(AccountPair::from).collect(),
+        .filter_map(|(sign, sessions)| match sign {
+            Activity::RawSign(sign) => {
+                if sign.is_valid() {
+                    Some(RawSignPair {
+                        sign,
+                        unames: sessions.into_iter().map(AccountPair::from).collect(),
+                    })
+                } else {
+                    None
+                }
+            }
+            Activity::Other(_) => None,
         })
         .collect())
 }
@@ -90,7 +117,7 @@ pub async fn prepare_sign(
         }
     }
     if let Some(session) = sessions.iter().next() {
-        let sign = sign.to_sign(session);
+        let sign = Sign::from_raw(sign, session);
         *sign_state.sign.lock().unwrap() = Some(sign);
         *sign_state.accounts.lock().unwrap() = sessions;
     }
@@ -209,12 +236,11 @@ pub async fn sign_single(
                 info!("签到[{sign_name}]为二维码签到。");
                 let mut sign = sign.clone();
                 let sign = &mut sign;
-                let _ =
-                    TauriQrCodeSignner::<TauriLocationInfoGetter, cxsign::store::DataBase>::new(
-                        Arc::clone(&db),
-                        app_handle_.clone(),
-                    )
-                    .sign(sign, None.iter());
+                let _ = TauriQrCodeSignner::<TauriLocationInfoGetter, DataBase>::new(
+                    Arc::clone(&db),
+                    app_handle_.clone(),
+                )
+                .sign(sign, None.iter());
             }
             Sign::Gesture(sign) => {
                 info!("签到[{sign_name}]为手势签到。");

@@ -1,9 +1,10 @@
-use cxsign::Session;
+use cxsign::user::Session;
 use log::trace;
 use ureq::{Agent, Response};
 
 static LIST_STUDENT_COURSE_LIVE_PAGE: &str =
     "http://newesxidian.chaoxing.com/frontLive/listStudentCourseLivePage";
+
 pub fn list_student_course_live_page(
     session: &Session,
     week: i64,
@@ -17,7 +18,9 @@ pub fn list_student_course_live_page(
     trace!("list_student_course_live_page: {url}");
     Ok(session.get(&url).call()?)
 }
+
 static LIST_SINGLE_COURSE: &str = "http://newesxidian.chaoxing.com/live/listSignleCourse";
+
 pub fn list_single_course(session: &Session, live_id: i32) -> Result<Response, Box<ureq::Error>> {
     let url = format!(
         "{LIST_SINGLE_COURSE}?fid=16820&liveId={live_id}&uId={}",
@@ -28,10 +31,12 @@ pub fn list_single_course(session: &Session, live_id: i32) -> Result<Response, B
 }
 
 static GET_VIEW_URL: &str = "http://newesxidian.chaoxing.com/live/getViewUrlNoCourseLive";
+
 pub fn get_live_url(agent: &Agent, device_conde: &str) -> Result<Response, Box<ureq::Error>> {
     let url = format!("{GET_VIEW_URL}?deviceCode={device_conde}&status=1&fid=16820");
     Ok(agent.get(&url).call()?)
 }
+
 // pub fn get_recording_url(
 //     agent: &Agent,
 //     device_conde: &str,
@@ -42,6 +47,7 @@ pub fn get_live_url(agent: &Agent, device_conde: &str) -> Result<Response, Box<u
 //     Ok(agent.get(&url).call()?)
 // }
 static GET_WEEK_DETAIL: &str = "http://newesxidian.chaoxing.com/frontLive/getWeekDetail";
+
 pub fn get_week_detail(
     agent: &Agent,
     week: i32,

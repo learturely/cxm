@@ -1,4 +1,3 @@
-use cxsign::utils::is_enc_qrcode_url;
 use image::{ImageBuffer, Rgba};
 
 #[tauri::command]
@@ -9,7 +8,7 @@ pub async fn scan_image(w: u32, h: u32, image_buffer: Vec<u8>) -> Result<String,
 
     // #[cfg(any(target_os = "linux", target_os = "windows", target_os = "macos"))]
     // image.save("./1.png").map_err(|err| err.to_string())?;
-    let r = cxsign::utils::scan_qrcode(
+    let r = cxsign::qrcode_utils::scan_qrcode(
         image::DynamicImage::from(image),
         &mut std::collections::HashMap::new(),
     )
@@ -17,7 +16,7 @@ pub async fn scan_image(w: u32, h: u32, image_buffer: Vec<u8>) -> Result<String,
     for r in &r {
         let url = r.getText();
         // 如果符合要求的二维码。
-        if !is_enc_qrcode_url(url) {
+        if !cxsign::qrcode_utils::is_enc_qrcode_url(url) {
             log::warn!("{url:?}不是有效的签到二维码！");
             continue;
         }

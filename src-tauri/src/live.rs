@@ -2,8 +2,7 @@ use std::{
     collections::{HashMap, HashSet},
     sync::{atomic::AtomicI32, Arc},
 };
-
-use cxsign::Session;
+use cxsign::user::Session;
 use log::debug;
 use serde::{Deserialize, Serialize};
 
@@ -21,6 +20,7 @@ pub struct Live {
     week_day: u32,
     jie: i32,
 }
+
 impl Live {
     pub fn get_id(&self) -> i32 {
         self.id
@@ -68,7 +68,7 @@ impl Live {
         vec.sort_by_key(Live::get_jie);
         Ok(vec.first().cloned())
     }
-    pub fn get_lives_now<'a, Iter: Iterator<Item = &'a Session> + Clone>(
+    pub fn get_lives_now<'a, Iter: Iterator<Item=&'a Session> + Clone>(
         sessions: Iter,
         app: tauri::AppHandle,
     ) -> HashMap<&'a str, (&'a str, Room, VideoPath)> {
@@ -109,7 +109,7 @@ impl Live {
                 "step1:set-progress",
                 done.load(std::sync::atomic::Ordering::Relaxed) as f32 / total as f32 * 100.0,
             )
-            .expect("emit `step1:set-progress` failed.");
+                .expect("emit `step1:set-progress` failed.");
         }
         if PROG_STATE.load(std::sync::atomic::Ordering::Relaxed) {
             app.unwrap_emit("step1:set-progress", 100.0)
@@ -145,7 +145,7 @@ impl Live {
                         done.load(std::sync::atomic::Ordering::Relaxed) as f32 / total as f32
                             * 100.0,
                     )
-                    .expect("emit `step2:set-progress` failed.");
+                        .expect("emit `step2:set-progress` failed.");
                     let video_path = room.get_live_video_path(session);
                     done.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
                     debug!("emit `step2:set-progress`.");
@@ -154,7 +154,7 @@ impl Live {
                         done.load(std::sync::atomic::Ordering::Relaxed) as f32 / total as f32
                             * 100.0,
                     )
-                    .expect("emit `step2:set-progress` failed.");
+                        .expect("emit `step2:set-progress` failed.");
                     rooms.insert(live, (room, video_path));
                 } else {
                     done.fetch_add(2, std::sync::atomic::Ordering::Relaxed);
@@ -164,7 +164,7 @@ impl Live {
                         done.load(std::sync::atomic::Ordering::Relaxed) as f32 / total as f32
                             * 100.0,
                     )
-                    .expect("emit `step2:set-progress` failed.");
+                        .expect("emit `step2:set-progress` failed.");
                 }
             }
         }

@@ -4,7 +4,7 @@ use std::{
 };
 
 use chrono::{Datelike, Local};
-use cxsign::Session;
+use cxsign::user::Session;
 use log::debug;
 use serde::{Deserialize, Serialize};
 
