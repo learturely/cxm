@@ -49,7 +49,7 @@ pub fn run() {
                     .into(),
             ));
             #[cfg(not(mobile))]
-            cxsign::dir::Dir::set_config_dir_info("TEST_CXSIGN", "up.workso", "Worksoup", "csm");
+            cxsign::dir::Dir::set_config_dir_info("TEST_XDSIGN", "rt.lea", "Learturely", "cxm");
             let db = DataBase::new();
             db.add_table::<AccountTable>();
             db.add_table::<ExcludeTable>();

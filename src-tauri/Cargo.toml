@@ -1,6 +1,6 @@
 [package]
 name = "cxm"
-version = "0.0.0"
+version = "0.0.1-beta.0"
 description = "A Tauri App"
 authors = ["worksoup"]
 edition = "2021"
@@ -28,7 +28,7 @@ serde_json = "1"
 tauri = { version = "2.0.0-beta", features = [] }
 tauri-plugin-barcode-scanner = "2.0.0-beta"
 tauri-plugin-shell = "2.0.0-beta"
-ureq = { version = "2.9", features = ["cookies", "json"] }
+ureq = { version = "2.10", features = ["cookies", "json"] }
 tauri-plugin-dialog = "2.0.0-beta"
 xdsign_data = { git = "https://github.com/learturely/xdsign_data.git" }
 

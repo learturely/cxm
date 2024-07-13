@@ -3,7 +3,7 @@ use log::debug;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, hash::Hash};
 use cxsign::user::Session;
-use tauri::AppHandle;
+use tauri::{AppHandle, Emitter};
 
 #[derive(Serialize, Default, Debug, Clone)]
 pub struct VideoPath {
@@ -28,7 +28,7 @@ impl UnWrapEmit for Option<AppHandle> {
         payload: S,
     ) -> Result<(), tauri::Error> {
         if let Some(app) = self {
-            tauri::Manager::emit(app, event, payload)
+            app.emit(event, payload)
         } else {
             out(&payload, None);
             Ok(())
@@ -42,7 +42,7 @@ impl UnWrapEmit for AppHandle {
         event: &str,
         payload: S,
     ) -> Result<(), tauri::Error> {
-        tauri::Manager::emit(self, event, payload)
+        self.emit(event, payload)
     }
 }
 
@@ -195,15 +195,15 @@ pub struct PairVec<K, V> {
     vec: Vec<(K, V)>,
 }
 
-// impl<K, V> PairVec<K, V> {
-//     pub fn new(vec: Vec<(K, V)>) -> Self {
-//         Self { vec }
-//     }
-// }
+impl<K, V> PairVec<K, V> {
+    pub fn new(vec: Vec<(K, V)>) -> Self {
+        Self { vec }
+    }
+}
 impl<K: Serialize, V: Serialize> Serialize for PairVec<K, V> {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
+    where
+        S: serde::Serializer,
     {
         use serde::ser::SerializeMap;
         let mut map = serializer.serialize_map(Some(self.vec.len()))?;

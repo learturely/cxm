@@ -240,7 +240,7 @@ pub async fn sign_single(
                     Arc::clone(&db),
                     app_handle_.clone(),
                 )
-                .sign(sign, None.iter());
+                    .sign(sign, None.iter());
             }
             Sign::Gesture(sign) => {
                 info!("签到[{sign_name}]为手势签到。");
@@ -284,10 +284,10 @@ pub async fn sign_single(
                         DefaultLocationInfoGetter::from(&*db.lock().unwrap()),
                         &location_str,
                     )
-                    .sign(
-                        sign,
-                        sessions.iter().filter(|a| unames.contains(a.get_uname())),
-                    ) {
+                        .sign(
+                            sign,
+                            sessions.iter().filter(|a| unames.contains(a.get_uname())),
+                        ) {
                         handle_results(results, &app_handle_)
                     }
                 });
