@@ -11,7 +11,7 @@ use std::{
     marker::PhantomData,
     sync::{Arc, Mutex},
 };
-use tauri::{AppHandle, Manager};
+use tauri::{AppHandle, Emitter, Listener, Manager};
 
 use crate::CurrentSignState;
 

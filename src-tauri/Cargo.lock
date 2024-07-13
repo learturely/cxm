@@ -1026,7 +1026,7 @@ dependencies = [
  "tauri-plugin-dialog",
  "tauri-plugin-shell",
  "ureq",
- "xcap",
+ "xcap 0.0.10",
  "xdsign_data",
 ]
 
@@ -1194,7 +1194,7 @@ dependencies = [
  "image",
  "log",
  "rxing",
- "xcap",
+ "xcap 0.0.9",
 ]
 
 [[package]]
@@ -6561,6 +6561,24 @@ name = "xcap"
 version = "0.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3b76339b2f4195ad7092d88a19819cd99fe15351f0cf82041c42afa8a33efd60"
+dependencies = [
+ "core-foundation",
+ "core-graphics",
+ "dbus",
+ "image",
+ "log",
+ "percent-encoding",
+ "sysinfo",
+ "thiserror",
+ "windows 0.54.0",
+ "xcb",
+]
+
+[[package]]
+name = "xcap"
+version = "0.0.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a462fc23e8aab59b6dbd7d717999d4589374ef94142005143e40740187847ccb"
 dependencies = [
  "core-foundation",
  "core-graphics",

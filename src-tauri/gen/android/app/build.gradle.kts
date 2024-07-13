@@ -10,17 +10,19 @@ plugins {
 val keyPropertiesFile = rootProject.file("key.properties")
 val keyProperties = Properties()
 keyProperties.load(FileInputStream(keyPropertiesFile))
-
+val tauriPropertiesFile = rootProject.file("app/tauri.properties")
+val tauriProperties = Properties()
+tauriProperties.load(FileInputStream(tauriPropertiesFile))
 android {
     compileSdk = 33
-    namespace = "rt.lea.cxm"
+    namespace = "up.workso.csm"
     defaultConfig {
         manifestPlaceholders["usesCleartextTraffic"] = "true"
-        applicationId = "rt.lea.cxm"
+        applicationId = "up.workso.csm"
         minSdk = 24
         targetSdk = 33
-        versionCode = 2
-        versionName = "0.0.1-beta.2"
+        versionCode = (tauriProperties["tauri.android.versionCode"] as String).toInt()
+        versionName = tauriProperties["tauri.android.versionName"] as String
     }
     signingConfigs {
         create("release") {

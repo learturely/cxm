@@ -7,11 +7,12 @@ pub struct CoursePair {
     course: Course,
     unames: Vec<AccountPair>,
 }
-#[derive(Serialize)]
-pub struct CoursePairs {
-    ok: Vec<CoursePair>,
-    excluded: Vec<CoursePair>,
-}
+// TODO:
+// #[derive(Serialize)]
+// pub struct CoursePairs {
+//     ok: Vec<CoursePair>,
+//     excluded: Vec<CoursePair>,
+// }
 #[tauri::command]
 pub async fn load_courses(
     sessions_state: tauri::State<'_, SessionsState>,

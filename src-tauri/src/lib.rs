@@ -19,6 +19,7 @@ use cxsign::default_impl::store::{
 };
 use log::{debug, error, info, trace};
 use state::*;
+use tauri::Listener;
 use std::sync::Arc;
 use std::sync::Mutex;
 use cxsign::types::Location;
