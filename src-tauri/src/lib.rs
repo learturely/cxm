@@ -16,6 +16,7 @@ use cxsign::default_impl::store::{
 };
 use log::{debug, info, trace};
 use state::*;
+use tauri::Listener;
 use std::sync::Arc;
 use std::sync::Mutex;
 use tauri::Manager;

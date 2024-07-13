@@ -10,7 +10,9 @@ plugins {
 val keyPropertiesFile = rootProject.file("key.properties")
 val keyProperties = Properties()
 keyProperties.load(FileInputStream(keyPropertiesFile))
-
+val tauriPropertiesFile = rootProject.file("app/tauri.properties")
+val tauriProperties = Properties()
+tauriProperties.load(FileInputStream(tauriPropertiesFile))
 android {
     compileSdk = 33
     namespace = "up.workso.csm"
@@ -19,8 +21,8 @@ android {
         applicationId = "up.workso.csm"
         minSdk = 24
         targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = (tauriProperties["tauri.android.versionCode"] as String).toInt() 
+        versionName = tauriProperties["tauri.android.versionName"] as String
     }
     signingConfigs {
         create("release") {
@@ -36,7 +38,7 @@ android {
             isDebuggable = true
             isJniDebuggable = true
             isMinifyEnabled = false
-            packaging {                
+            packaging {
                 jniLibs.keepDebugSymbols.add("*/arm64-v8a/*.so")
                 jniLibs.keepDebugSymbols.add("*/armeabi-v7a/*.so")
                 jniLibs.keepDebugSymbols.add("*/x86/*.so")

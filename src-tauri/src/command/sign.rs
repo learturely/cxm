@@ -20,7 +20,7 @@ use std::{
     str::FromStr,
     sync::Arc,
 };
-use tauri::Manager;
+use tauri::{Emitter, Listener};
 use tauri_plugin_dialog::DialogExt;
 
 use crate::{
