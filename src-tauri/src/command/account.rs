@@ -29,7 +29,7 @@ pub async fn add_account(
 ) -> Result<(), String> {
     let db = db_state.0.lock().unwrap();
     let enc_pwd = des_enc(&pwd);
-    let session = Session::login(&uname, &enc_pwd).map_err(|e: Error| {
+    let session = Session::relogin(&uname, &enc_pwd).map_err(|e: Error| {
         eprint!("添加账号错误！");
         match e {
             Error::LoginError(e) => e,
@@ -64,7 +64,7 @@ pub async fn refresh_accounts(
                 .lock()
                 .map_err(|e| e.to_string())?
                 .remove(&uname);
-            if let Ok(session) = Session::login(&uname, &enc_pwd) {
+            if let Ok(session) = Session::relogin(&uname, &enc_pwd) {
                 let name = session.get_stu_name();
                 AccountTable::add_account_or(
                     &db,

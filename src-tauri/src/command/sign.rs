@@ -199,7 +199,13 @@ pub async fn sign_single(
                         .pick_file(move |file_response| {
                             let mut sign = sign.clone();
                             let sign = &mut sign;
-                            let path = file_response.map(|p| p.path);
+                            let path = match file_response {
+                                Some(fp) => match fp {
+                                    tauri_plugin_dialog::FilePath::Url(url) => None,
+                                    tauri_plugin_dialog::FilePath::Path(path) => Some(path),
+                                },
+                                None => None,
+                            };
                             let unames = unames.lock().unwrap();
                             let sessions = sessions.lock().unwrap();
                             let results = DefaultPhotoSignner::new(&path).sign(
@@ -240,7 +246,7 @@ pub async fn sign_single(
                     Arc::clone(&db),
                     app_handle_.clone(),
                 )
-                    .sign(sign, None.iter());
+                .sign(sign, None.iter());
             }
             Sign::Gesture(sign) => {
                 info!("签到[{sign_name}]为手势签到。");
@@ -284,10 +290,10 @@ pub async fn sign_single(
                         DefaultLocationInfoGetter::from(&*db.lock().unwrap()),
                         &location_str,
                     )
-                        .sign(
-                            sign,
-                            sessions.iter().filter(|a| unames.contains(a.get_uname())),
-                        ) {
+                    .sign(
+                        sign,
+                        sessions.iter().filter(|a| unames.contains(a.get_uname())),
+                    ) {
                         handle_results(results, &app_handle_)
                     }
                 });
