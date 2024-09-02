@@ -195,7 +195,13 @@ pub async fn sign_single(
                         .pick_file(move |file_response| {
                             let mut sign = sign.clone();
                             let sign = &mut sign;
-                            let path = file_response.map(|p| p.path);
+                            let path = match file_response {
+                                Some(fp) => match fp {
+                                    tauri_plugin_dialog::FilePath::Url(_) => None,
+                                    tauri_plugin_dialog::FilePath::Path(path) => Some(path),
+                                },
+                                None => None,
+                            };
                             let unames = unames.lock().unwrap();
                             let sessions = sessions.lock().unwrap();
                             let results = DefaultPhotoSignner::new(&path).sign(
