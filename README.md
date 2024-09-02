@@ -39,6 +39,26 @@ X 星签到的命令行工具的安卓版本，~~可以为每个课程添加单�
 
 ~~见 [Wiki](https://github.com/worksoup/cxsign/wiki).~~（不适用，但可参考。如有问题请发 issues.）
 
+### 如何编译
+```
+pnpm install
+./build.lua android --release --target aarch64
+```
+关于 `build.lua`:
+```
+$ ./build.lua help
+用法：build.lua [OS_NAME] [PROFILE] [...ARGS]
+    [OS_NAME] 支持的值有：
+        MOBILE:         android, ios
+        DESKTOP:        windows, linux, macos
+    省略则使用当前系统值。
+    [PROFILE] 支持的值有：
+        RELEASE:        -r, --release, r, release
+        DEBUG:          --debug, debug
+    省略则使用 `debug`.
+    [...ARGS] 将传递给 `pnpm tauri`.
+打印本信息：build.lua [-h / h / --help / help]
+```
 ## 建议、问题、反馈
 
 欢迎发 issues 和 pr.

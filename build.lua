@@ -99,9 +99,12 @@ if arg[1] == "h" or arg[1] == "help" or arg[1] == "-h" or arg[1] == "--help" the
     print("    [OS_NAME] 支持的值有：");
     print("        MOBILE:  ", table.concat(__MOBILE, ", "));
     print("        DESKTOP: ", table.concat(__DESKTOP, ", "));
+    print("    省略则使用当前系统值。");
     print("    [PROFILE] 支持的值有：");
     print("        RELEASE: ", table.concat(__RELEASE, ", "));
     print("        DEBUG:   ", table.concat(__DEBUG, ", "));
+    print("    省略则使用 `debug`.");
+    print("    [...ARGS] 将传递给 `pnpm tauri`.")
     print("打印本信息：build.lua [-h / h / --help / help]");
     return;
 end
