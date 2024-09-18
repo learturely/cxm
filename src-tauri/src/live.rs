@@ -95,7 +95,7 @@ impl Live {
                 break;
             }
             if first {
-                (term_year, term, week) = crate::tools::term_year_detial(session);
+                (term_year, term, week) = crate::tools::term_year_detail(session);
                 first = false;
             }
             let jie = crate::tools::now_to_jie();

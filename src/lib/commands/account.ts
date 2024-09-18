@@ -1,4 +1,4 @@
-import { invoke } from "@tauri-apps/api/core";
+import {invoke} from "@tauri-apps/api/core";
 
 export type AccountPair = {
   uname: string;
@@ -7,8 +7,7 @@ export type AccountPair = {
 };
 
 export async function getConfigDir(): Promise<string> {
-  let dir = await invoke<string>("get_config_dir");
-  return dir;
+  return await invoke<string>("get_config_dir");
 }
 export async function hasAccounts(): Promise<boolean> {
   let t = false;
