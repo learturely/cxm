@@ -1,6 +1,6 @@
 [package]
 name = "cxm"
-version = "0.0.1-beta.0"
+version = "0.0.1-beta.2"
 description = "A Tauri App"
 authors = ["worksoup"]
 edition = "2021"
@@ -33,7 +33,7 @@ tauri-plugin-dialog = "2.0.0-beta"
 xdsign_data = { git = "https://github.com/learturely/xdsign_data.git" }
 
 [target.'cfg(any(target_os = "linux", target_os = "windows", target_os = "macos"))'.dependencies]
-xcap = { version = "0.0.10" }
+xcap = { version = "0.0.13" }
 
 [profile.release]
 panic = "abort"
