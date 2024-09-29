@@ -201,7 +201,7 @@ pub async fn sign_single(
                             let sign = &mut sign;
                             let path = match file_response {
                                 Some(fp) => match fp {
-                                    tauri_plugin_dialog::FilePath::Url(url) => None,
+                                    tauri_plugin_dialog::FilePath::Url(_url) => None,
                                     tauri_plugin_dialog::FilePath::Path(path) => Some(path),
                                 },
                                 None => None,
