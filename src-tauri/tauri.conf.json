@@ -1,6 +1,6 @@
 {
   "productName": "cxm",
-  "version": "0.0.1-beta.3",
+  "version": "0.0.1-beta.4",
   "identifier": "rt.lea.cxm",
   "build": {
     "beforeDevCommand": "pnpm dev",

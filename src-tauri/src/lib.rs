@@ -6,9 +6,6 @@
 #![feature(map_try_insert)]
 
 mod command;
-mod live;
-mod protocol;
-mod room;
 mod location_info_getter;
 mod signner;
 mod state;
@@ -33,9 +30,9 @@ pub fn run() {
     Location::set_boxed_location_preprocessor(Box::new(xdsign_data::LocationPreprocessor))
         .unwrap_or_else(|e| error!("{e}"));
     #[cfg(mobile)]
-        let default_builder = tauri::Builder::default().plugin(tauri_plugin_barcode_scanner::init());
+    let default_builder = tauri::Builder::default().plugin(tauri_plugin_barcode_scanner::init());
     #[cfg(not(mobile))]
-        let default_builder = tauri::Builder::default();
+    let default_builder = tauri::Builder::default();
     // #[cfg(target_os = "android")]
     // let default_builder = default_builder.plugin(file_picker_android::init());
     // #[cfg(not(target_os = "android"))]
@@ -83,7 +80,7 @@ pub fn run() {
             load_accounts,
             list_rooms,
             code_to_video_path,
-            get_video_pathes_now,
+            get_video_paths_now,
             load_courses,
             list_courses,
             list_course_activities,
@@ -107,7 +104,7 @@ mod test {
     #[test]
     fn test() {
         for i in 0..360 {
-            let (y, t, w) = crate::tools::date_count_to_year_term_week(2024, i);
+            let (y, t, w) = xddcc::date_count_to_year_term_week(2024, i);
             println!("{y}, {t}, {w}");
         }
     }

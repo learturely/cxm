@@ -18,7 +18,8 @@ use crate::CurrentSignState;
 pub struct TauriQrCodeSignner<
     T1: LocationInfoGetterTrait + Sync + Send + for<'a> From<&'a Arc<Mutex<T2>>>,
     T2,
-> where
+>
+where
     Arc<Mutex<T2>>: Sync + Send,
 {
     app_handle: AppHandle,
@@ -26,7 +27,7 @@ pub struct TauriQrCodeSignner<
     _p: PhantomData<T1>,
 }
 impl<T1: LocationInfoGetterTrait + Sync + Send + for<'a> From<&'a Arc<Mutex<T2>>>, T2>
-    TauriQrCodeSignner<T1, T2>
+TauriQrCodeSignner<T1, T2>
 where
     Arc<Mutex<T2>>: Sync + Send,
 {
@@ -40,13 +41,13 @@ where
 }
 
 impl<T1: LocationInfoGetterTrait + Sync + Send + for<'a> From<&'a Arc<Mutex<T2>>>, T2: 'static>
-    SignnerTrait<QrCodeSign> for TauriQrCodeSignner<T1, T2>
+SignnerTrait<QrCodeSign> for TauriQrCodeSignner<T1, T2>
 where
     Arc<Mutex<T2>>: Sync + Send,
 {
     type ExtData<'e> = Location;
 
-    fn sign<'a, Sessions: Iterator<Item = &'a Session> + Clone>(
+    fn sign<'a, Sessions: Iterator<Item=&'a Session> + Clone>(
         &mut self,
         sign: &mut QrCodeSign,
         _: Sessions,
@@ -91,12 +92,12 @@ where
                                 if !location_str.is_empty() {
                                     preset_location.set_addr(location_str);
                                 }
-                                (*location.lock().unwrap()) = preset_location.clone();
+                                *location.lock().unwrap() = preset_location.clone();
                             },
                             |location_| {
                                 let mut preset_location = preset_location.lock().unwrap().clone();
                                 preset_location.set_addr(location_.get_addr());
-                                (*location.lock().unwrap()) = location_;
+                                *location.lock().unwrap() = location_;
                             },
                         )
                     };
@@ -129,10 +130,10 @@ where
                                 .map_location_str(location_str)
                                 .map_or_else(
                                     || {
-                                        (*location.lock().unwrap()) = location_fallback.clone();
+                                        *location.lock().unwrap() = location_fallback.clone();
                                     },
                                     |location_| {
-                                        (*location.lock().unwrap()) = location_;
+                                        *location.lock().unwrap() = location_;
                                     },
                                 )
                         }
@@ -160,7 +161,7 @@ where
                                 .map_or_else(
                                     || {},
                                     |location_| {
-                                        (*location.lock().unwrap()) = location_;
+                                        *location.lock().unwrap() = location_;
                                     },
                                 )
                         }
@@ -208,7 +209,7 @@ where
                         match <Self as SignnerTrait<QrCodeSign>>::sign_single(
                             &mut sign, &session, location,
                         )
-                        .unwrap_or_else(|e| SignResult::Fail { msg: e.to_string() })
+                            .unwrap_or_else(|e| SignResult::Fail { msg: e.to_string() })
                         {
                             SignResult::Susses => {
                                 app.emit("sign:susses", session.get_uname()).unwrap();

@@ -22,7 +22,7 @@ export async function getLivesNow(
   unames_: Set<string>
 ): Promise<LiveUrlPair[]> {
   let unames = Array.from(unames_);
-  return await invoke<LiveUrlPair[]>("get_video_pathes_now", {
+  return await invoke<LiveUrlPair[]>("get_video_paths_now", {
     unames,
   });
 }
