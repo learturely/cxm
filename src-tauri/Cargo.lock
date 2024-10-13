@@ -1009,7 +1009,6 @@ dependencies = [
  "env_logger",
  "image",
  "log",
- "percent-encoding",
  "serde",
  "serde_json",
  "tauri",
