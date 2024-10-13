@@ -30,9 +30,6 @@ tauri-plugin-dialog = "2.0"
 xddcc = { git = "https://github.com/learturely/xddcc.git" }
 xdsign_data = { git = "https://github.com/learturely/xdsign_data.git" }
 
-[target.'cfg(any(target_os = "linux", target_os = "windows", target_os = "macos"))'.dependencies]
-xcap = { version = "0.0.14" }
-
 [profile.release]
 panic = "abort"
 codegen-units = 1

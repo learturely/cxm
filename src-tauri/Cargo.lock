@@ -1016,7 +1016,6 @@ dependencies = [
  "tauri-plugin-barcode-scanner",
  "tauri-plugin-dialog",
  "tauri-plugin-shell",
- "xcap",
  "xddcc",
  "xdsign_data",
 ]
