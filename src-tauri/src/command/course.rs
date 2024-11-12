@@ -5,7 +5,7 @@ use crate::{AccountPair, CoursesState, SessionsState};
 #[derive(Serialize)]
 pub struct CoursePair {
     course: Course,
-    unames: Vec<AccountPair>,
+    account_pairs: Vec<AccountPair>,
 }
 // TODO:
 // #[derive(Serialize)]
@@ -22,10 +22,10 @@ pub async fn load_courses(
     let mut courses = courses_state.0.lock().unwrap();
     courses.clear();
     let courses_ = Course::get_courses(sessions.values()).map_err(|e| e.to_string())?;
-    for (course, accounts) in courses_ {
+    for (course, session_vec) in courses_ {
         courses.insert(
             course,
-            accounts.into_iter().map(AccountPair::from).collect(),
+            session_vec.into_iter().map(AccountPair::from).collect(),
         );
     }
     Ok(())
@@ -36,10 +36,10 @@ pub async fn list_courses(
 ) -> Result<Vec<CoursePair>, String> {
     let courses = &courses_state.0;
     let mut course_pairs = Vec::<CoursePair>::new();
-    for (course, unames) in courses.lock().unwrap().iter() {
+    for (course, account_pairs) in courses.lock().unwrap().iter() {
         course_pairs.push(CoursePair {
             course: course.clone(),
-            unames: unames.clone(),
+            account_pairs: account_pairs.clone(),
         })
     }
     Ok(course_pairs)

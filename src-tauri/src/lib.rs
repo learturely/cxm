@@ -56,7 +56,7 @@ pub fn run() {
             app.manage(SessionsState::default());
             app.manage(DataBaseState(Arc::new(Mutex::new(db))));
             app.manage(CurrentSignState::default());
-            app.manage(CurrentSignUnamesState::default());
+            app.manage(CurrentSignUidSetState::default());
             debug!("程序加载。");
             let app_handle = app.handle().clone();
             std::thread::spawn(move || {
@@ -89,11 +89,11 @@ pub fn run() {
             get_sign_type,
             sign_single,
             scan_image,
-            remove_uname,
-            add_uname,
-            has_uname,
-            add_unames,
-            clear_unames,
+            remove_uid,
+            add_uid,
+            has_uid,
+            extent_uid_set,
+            clear_uid_set,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
