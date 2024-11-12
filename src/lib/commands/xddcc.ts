@@ -1,28 +1,32 @@
-import { invoke } from "@tauri-apps/api/core";
-import type { VideoPath } from "./tools";
+import {invoke} from "@tauri-apps/api/core";
+import type {VideoPath} from "./tools";
+
 export type RoomPair = {
-  name: string;
-  code: string;
+    name: string;
+    code: string;
 };
 export type LiveUrlPair = {
-  name: string;
-  room: RoomPair;
-  live: VideoPath;
+    name: string;
+    room: RoomPair;
+    live: VideoPath;
 };
-export async function listRooms(unames_: Set<string>): Promise<RoomPair[]> {
-  let unames = Array.from(unames_);
-  return await invoke("list_rooms", { unames });
+
+export async function listRooms(uidSet: Set<string>): Promise<RoomPair[]> {
+    let uidVec = Array.from(uidSet);
+    return await invoke("list_rooms", {uidVec});
 }
+
 export async function code2Url(code: string): Promise<VideoPath> {
-  return await invoke<VideoPath>("code_to_video_path", {
-    code,
-  });
+    return await invoke<VideoPath>("code_to_video_path", {
+        code,
+    });
 }
+
 export async function getLivesNow(
-  unames_: Set<string>
+    uidSet: Set<string>
 ): Promise<LiveUrlPair[]> {
-  let unames = Array.from(unames_);
-  return await invoke<LiveUrlPair[]>("get_video_paths_now", {
-    unames,
-  });
+    let uidVec = Array.from(uidSet);
+    return await invoke<LiveUrlPair[]>("get_video_paths_now", {
+        uidVec,
+    });
 }

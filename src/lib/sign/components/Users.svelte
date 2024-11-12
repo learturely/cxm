@@ -19,7 +19,7 @@
     }
     $: if (uidSet.size == resultsFailedCount) {
         resultsFailedCount = 0;
-        updateUnames().then();
+        updateUidSet().then();
         disabled = false;
     }
     uidSet = uidSet;
@@ -64,7 +64,7 @@
         uidSet = uidSet;
     }
 
-    async function updateUnames() {
+    async function updateUidSet() {
         await clearUidSet();
         await extentUidSet(uidSet);
         console.log("update uidSet");
@@ -90,7 +90,7 @@
                                 id={"ulcb-" + account.uid}
                                 onCheckedChange={async () => {
                 removeOrAddElement(account.uid);
-                await updateUnames();
+                await updateUidSet();
               }}
                         />
                         <Label class="flex grow" for={"ulcb-" + account.uid}>

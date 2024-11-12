@@ -14,21 +14,37 @@ mod tools;
 use cxsign::default_impl::store::{
     AccountTable, AliasTable, DataBase, ExcludeTable, LocationTable,
 };
-use log::{debug, error, info, trace};
+use log::{debug, error, info, trace, warn};
 use state::*;
 use tauri::Listener;
 use std::sync::Arc;
 use std::sync::Mutex;
+use cxsign::dir::Dir;
+use cxsign::login::{LoginSolverTrait, LoginSolvers};
 use cxsign::types::Location;
 use tauri::Manager;
-
+use x_l4rs::XL4rsLoginSolver;
+use xdsign_data::LocationPreprocessor;
 use command::*;
-
+fn init_function(#[cfg(mobile)] app: &mut tauri::App<tauri::Wry>) {
+    #[cfg(mobile)]
+    cxsign::dir::Dir::set_config_dir(Box::new(
+        app.path()
+            .resolve("", tauri::path::BaseDirectory::AppLocalData)?
+            .into(),
+    ));
+    #[cfg(not(mobile))]
+    Dir::set_config_dir_info("TEST_XDSIGN", "rt.lea", "Learturely", "cxm");
+    Location::set_boxed_location_preprocessor(Box::new(LocationPreprocessor))
+        .unwrap_or_else(|e| error!("{e}"));
+    let login_solver = XL4rsLoginSolver::TARGET_LEARNING;
+    let login_type = login_solver.login_type().to_owned();
+    LoginSolvers::register(login_solver)
+        .unwrap_or_else(|_| warn!("登录协议 `{login_type}` 注册失败！"));
+}
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     env_logger::init();
-    Location::set_boxed_location_preprocessor(Box::new(xdsign_data::LocationPreprocessor))
-        .unwrap_or_else(|e| error!("{e}"));
     #[cfg(mobile)]
     let default_builder = tauri::Builder::default().plugin(tauri_plugin_barcode_scanner::init());
     #[cfg(not(mobile))]
@@ -40,13 +56,9 @@ pub fn run() {
     default_builder
         .setup(|app| {
             #[cfg(mobile)]
-            cxsign::dir::Dir::set_config_dir(Box::new(
-                app.path()
-                    .resolve("", tauri::path::BaseDirectory::AppLocalData)?
-                    .into(),
-            ));
+            crate::init_function(app);
             #[cfg(not(mobile))]
-            cxsign::dir::Dir::set_config_dir_info("TEST_XDSIGN", "rt.lea", "Learturely", "cxm");
+            init_function();
             let db = DataBase::new();
             db.add_table::<AccountTable>();
             db.add_table::<ExcludeTable>();

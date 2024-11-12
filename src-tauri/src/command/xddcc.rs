@@ -30,15 +30,15 @@ pub struct LiveUrlPair {
 }
 #[tauri::command]
 pub async fn list_rooms(
-    unames: Vec<String>,
+    uid_vec: Vec<String>,
     sessions_state: State<'_, SessionsState>,
     app_handle: tauri::AppHandle,
 ) -> Result<Vec<RoomPair>, String> {
     debug!("call_from_js: list_rooms");
     let sessions = sessions_state.0.lock().unwrap();
     let mut accounts = Vec::new();
-    for uname in unames {
-        if let Some(account) = sessions.get(&uname) {
+    for uid in uid_vec {
+        if let Some(account) = sessions.get(&uid) {
             accounts.push(account);
         }
     }
@@ -78,14 +78,14 @@ pub async fn code_to_video_path(
     Err("未能成功获取！".into())
 }
 pub fn get_lives_now(
-    unames: &Vec<String>,
+    uid_vec: &Vec<String>,
     sessions_state: &State<'_, SessionsState>,
     app_handle: tauri::AppHandle,
 ) -> Result<Vec<LiveUrlPair>, String> {
     let sessions = sessions_state.0.lock().unwrap();
     let mut accounts = Vec::new();
-    for uname in unames {
-        if let Some(account) = sessions.get(uname) {
+    for uid in uid_vec {
+        if let Some(account) = sessions.get(uid) {
             accounts.push(account);
         }
     }
@@ -104,9 +104,9 @@ pub fn get_lives_now(
 }
 #[tauri::command]
 pub async fn get_video_paths_now(
-    unames: Vec<String>,
+    uid_vec: Vec<String>,
     sessions_state: State<'_, SessionsState>,
     app_handle: tauri::AppHandle,
 ) -> Result<Vec<LiveUrlPair>, String> {
-    get_lives_now(&unames, &sessions_state, app_handle)
+    get_lives_now(&uid_vec, &sessions_state, app_handle)
 }
