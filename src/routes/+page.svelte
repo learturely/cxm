@@ -26,7 +26,7 @@
     let accounts: AccountPair[] = [];
     let signs: RawSignPair[] = [];
     let scanning: boolean = false;
-    let unames = new Set<string>();
+    let uidSet = new Set<string>();
     let firstLogin = false;
     let coursesUpdating = true;
     let signsUpdating = true;
@@ -75,7 +75,7 @@
     async function updateAccounts() {
         usersUpdating = true;
         await loadAccounts();
-        await refreshAccounts(unames);
+        await refreshAccounts(uidSet);
         await listAccounts()
             .then((data) => {
                 accounts = data;
@@ -112,7 +112,7 @@
                 <HomeUsers
                         bind:state
                         bind:accounts
-                        bind:unames
+                        bind:uidSet
                         bind:updating={usersUpdating}
                         on:updateAccounts={updateAccounts}
                 />
@@ -160,6 +160,7 @@
     <Login
             bind:firstLogin
             on:login={async () => {
+                console.debug("login")
       await updateAccounts();
       await updateSigns();
       await updateCourses();

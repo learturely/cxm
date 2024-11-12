@@ -51,10 +51,10 @@ where
         sign: &mut QrCodeSign,
         _: Sessions,
     ) -> Result<HashMap<&'a Session, SignResult>, Error> {
-        let sessions = self.app_handle.state::<CurrentSignState>().accounts.clone();
-        let unames = self
+        let sessions = self.app_handle.state::<CurrentSignState>().sessions.clone();
+        let uid_set = self
             .app_handle
-            .state::<crate::state::CurrentSignUnamesState>()
+            .state::<crate::state::CurrentSignUidSetState>()
             .0
             .clone();
         let sessions_lock = sessions.lock().unwrap();
@@ -91,12 +91,12 @@ where
                                 if !location_str.is_empty() {
                                     preset_location.set_addr(location_str);
                                 }
-                                (*location.lock().unwrap()) = preset_location.clone();
+                                *location.lock().unwrap() = preset_location.clone();
                             },
                             |location_| {
                                 let mut preset_location = preset_location.lock().unwrap().clone();
                                 preset_location.set_addr(location_.get_addr());
-                                (*location.lock().unwrap()) = location_;
+                                *location.lock().unwrap() = location_;
                             },
                         )
                     };
@@ -129,10 +129,10 @@ where
                                 .map_location_str(location_str)
                                 .map_or_else(
                                     || {
-                                        (*location.lock().unwrap()) = location_fallback.clone();
+                                        *location.lock().unwrap() = location_fallback.clone();
                                     },
                                     |location_| {
-                                        (*location.lock().unwrap()) = location_;
+                                        *location.lock().unwrap() = location_;
                                     },
                                 )
                         }
@@ -160,7 +160,7 @@ where
                                 .map_or_else(
                                     || {},
                                     |location_| {
-                                        (*location.lock().unwrap()) = location_;
+                                        *location.lock().unwrap() = location_;
                                     },
                                 )
                         }
@@ -173,7 +173,7 @@ where
         let sign = sign.clone();
         log::info!("初始化二维码签到处理程序。");
         let enc_thread_handle = std::thread::spawn(move || {
-            let unames = Arc::clone(&unames);
+            let uid_set_ = Arc::clone(&uid_set);
             let app = app_handle.clone();
             app_handle.listen("sign:qrcode:enc", move |p| {
                 log::info!("reserve: `sign:qrcode:enc`.");
@@ -188,7 +188,7 @@ where
                 }
                 let mut sign = sign.clone();
                 sign.set_enc(enc);
-                let unames = unames.lock().unwrap();
+                let uid_set__ = uid_set_.lock().unwrap();
                 let mut handles = Vec::new();
                 let sessions_lock = sessions.lock().unwrap();
                 let sessions_ = sessions_lock.clone();
@@ -199,7 +199,7 @@ where
                 //     location_fallback.lock().unwrap().clone(),
                 // ];
                 let location1 = location.lock().unwrap().clone();
-                for session in sessions_.iter().filter(|a| unames.contains(a.get_uname())) {
+                for session in sessions_.iter().filter(|a| uid_set__.contains(a.get_uid())) {
                     let mut sign = sign.clone();
                     let session = session.clone();
                     let app = app.clone();
@@ -211,10 +211,10 @@ where
                         .unwrap_or_else(|e| SignResult::Fail { msg: e.to_string() })
                         {
                             SignResult::Susses => {
-                                app.emit("sign:susses", session.get_uname()).unwrap();
+                                app.emit("sign:susses", session.get_uid()).unwrap();
                             }
                             SignResult::Fail { msg } => {
-                                app.emit("sign:fail", [session.get_uname(), &msg]).unwrap()
+                                app.emit("sign:fail", [session.get_uid(), &msg]).unwrap()
                             }
                         };
                     });

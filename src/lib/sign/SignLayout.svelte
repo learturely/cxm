@@ -20,7 +20,7 @@
   export let accounts: AccountPair[];
   export let state: Page;
   export let scanning: boolean = false;
-  let unames = new Set<string>();
+  let uidSet = new Set<string>();
   let signType = SignType.normal;
   let userListDisabled = false;
   onMount(async () => {
@@ -57,7 +57,7 @@
 </script>
 
 <div class="flex-col space-y-2">
-  <Users bind:accounts bind:unames bind:disabled={userListDisabled} />
+  <Users bind:accounts bind:uidSet bind:disabled={userListDisabled} />
   {#if signType === SignType.qrcode}
     <QrCode
       bind:state

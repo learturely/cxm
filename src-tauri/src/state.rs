@@ -24,8 +24,8 @@ pub struct CoursesState(pub(crate) Mutex<HashMap<Course, Vec<AccountPair>>>);
 #[derive(Default)]
 pub struct CurrentSignState {
     pub(crate) sign: Arc<Mutex<Option<Sign>>>,
-    pub(crate) accounts: Arc<Mutex<HashSet<Session>>>,
+    pub(crate) sessions: Arc<Mutex<HashSet<Session>>>,
 }
 
 #[derive(Default)]
-pub struct CurrentSignUnamesState(pub(crate) Arc<Mutex<HashSet<String>>>);
+pub struct CurrentSignUidSetState(pub(crate) Arc<Mutex<HashSet<String>>>);

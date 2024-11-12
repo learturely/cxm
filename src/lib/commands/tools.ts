@@ -1,19 +1,21 @@
-import { invoke } from "@tauri-apps/api/core";
+import {invoke} from "@tauri-apps/api/core";
 import {
-  CAN_USE_CAM,
-  CAN_USE_CAP,
-  GET_QR_CODE_TYPE_COUNT,
-  OS_NAME,
+    CAN_USE_CAM,
+    CAN_USE_CAP,
+    GET_QR_CODE_TYPE_COUNT,
+    OS_NAME,
 } from "./constants";
+
 export enum Page {
-  home,
-  login,
-  courseSigns,
-  sign,
-  qrCodeScanner,
-  // locations,
-  // locationImpoter,
+    home,
+    login,
+    courseSigns,
+    sign,
+    qrCodeScanner,
+    // locations,
+    // locationImpoter,
 }
+
 // export type HomePageData = {
 //   value: string;
 // };
@@ -36,25 +38,29 @@ export enum Page {
 //   data: GlobalStateData<typeof this.page>;
 // }
 export async function scanImage(
-  w: number,
-  h: number,
-  imageBuffer: Iterable<number>
+    w: number,
+    h: number,
+    imageBuffer: Iterable<number>
 ): Promise<string> {
-  return await invoke<string>("scan_image", {
-    w,
-    h,
-    imageBuffer: Array.from(imageBuffer),
-  });
+    return await invoke<string>("scan_image", {
+        w,
+        h,
+        imageBuffer: Array.from(imageBuffer),
+    });
 }
+
 export function osName(): string {
-  return OS_NAME;
+    return OS_NAME;
 }
+
 export function canUseCam(): boolean {
-  return CAN_USE_CAM;
+    return CAN_USE_CAM;
 }
+
 export function canUseCap(): boolean {
-  return CAN_USE_CAP;
+    return CAN_USE_CAP;
 }
+
 export function getQrCodeTypeCount(): number {
-  return GET_QR_CODE_TYPE_COUNT;
+    return GET_QR_CODE_TYPE_COUNT;
 }
