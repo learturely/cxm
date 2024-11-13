@@ -142,7 +142,7 @@ if not IsInArray(PROFILE, __PROFILE) then
     UNPACK_INDEX = UNPACK_INDEX - 1;
 end
 IS_DEBUG = PROFILE == "debug"
-CAN_USE_HLS = IsInArray(OS_NAME, { "windows", "android" });
+CAN_USE_HLS = IsInArray(OS_NAME, { "linux", "windows", "android" });
 CAN_USE_CAM = IsInArray(OS_NAME, { "android", "ios" });
 CAN_USE_CAP = IsInArray(OS_NAME, { "windows", "macos", "linux" });
 GET_QR_CODE_TYPE_COUNT = B2N(CAN_USE_CAM) + B2N(CAN_USE_CAP) + B2N(CAN_USE_HLS);

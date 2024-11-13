@@ -27,8 +27,6 @@ use x_l4rs::XL4rsLoginSolver;
 use xdsign_data::LocationPreprocessor;
 use command::*;
 fn init_function() {
-    #[cfg(not(mobile))]
-    Dir::set_config_dir_info("TEST_XDSIGN", "rt.lea", "Learturely", "cxm");
     Location::set_boxed_location_preprocessor(Box::new(LocationPreprocessor))
         .unwrap_or_else(|e| error!("{e}"));
     let login_solver = XL4rsLoginSolver::TARGET_LEARNING;
@@ -55,6 +53,8 @@ pub fn run() {
                     .resolve("", tauri::path::BaseDirectory::AppLocalData)?
                     .into(),
             ));
+            #[cfg(not(mobile))]
+            Dir::set_config_dir_info("TEST_XDSIGN", "rt.lea", "Learturely", "cxm");
             init_function();
             let db = DataBase::new();
             db.add_table::<AccountTable>();
