@@ -26,13 +26,7 @@ use tauri::Manager;
 use x_l4rs::XL4rsLoginSolver;
 use xdsign_data::LocationPreprocessor;
 use command::*;
-fn init_function(#[cfg(mobile)] app: &mut tauri::App<tauri::Wry>) {
-    #[cfg(mobile)]
-    cxsign::dir::Dir::set_config_dir(Box::new(
-        app.path()
-            .resolve("", tauri::path::BaseDirectory::AppLocalData)?
-            .into(),
-    ));
+fn init_function() {
     #[cfg(not(mobile))]
     Dir::set_config_dir_info("TEST_XDSIGN", "rt.lea", "Learturely", "cxm");
     Location::set_boxed_location_preprocessor(Box::new(LocationPreprocessor))
@@ -56,8 +50,11 @@ pub fn run() {
     default_builder
         .setup(|app| {
             #[cfg(mobile)]
-            crate::init_function(app);
-            #[cfg(not(mobile))]
+            Dir::set_config_dir(Box::new(
+                app.path()
+                    .resolve("", tauri::path::BaseDirectory::AppLocalData)?
+                    .into(),
+            ));
             init_function();
             let db = DataBase::new();
             db.add_table::<AccountTable>();
