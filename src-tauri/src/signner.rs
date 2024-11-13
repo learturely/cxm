@@ -77,7 +77,7 @@ where
             std::thread::spawn(move || {
                 let app = app_handle_.clone();
                 app_handle_.listen("sign:qrcode:location", move |p| {
-                    log::info!("reserve: `sign:qrcode:location`.");
+                    log::info!("received: `sign:qrcode:location`.");
                     if p.payload() == "\"quit\"" {
                         log::info!("quit");
                         app.unlisten(p.id());
@@ -101,7 +101,7 @@ where
                             },
                         )
                     };
-                    log::info!("reserve: `sign:qrcode:location`, end.");
+                    log::info!("received: `sign:qrcode:location`, end.");
                 });
             })
         } else {
@@ -115,7 +115,7 @@ where
                 std::thread::spawn(move || {
                     let app = app_handle_.clone();
                     app_handle_.listen("sign:qrcode:location", move |p| {
-                        log::info!("reserve: `sign:qrcode:location`.");
+                        log::info!("received: `sign:qrcode:location`.");
                         if p.payload() == "\"quit\"" {
                             log::info!("quit");
                             app.unlisten(p.id());
@@ -137,7 +137,7 @@ where
                                     },
                                 )
                         }
-                        log::info!("reserve: `sign:qrcode:location`, end.");
+                        log::info!("received: `sign:qrcode:location`, end.");
                     });
                 })
             } else {
@@ -146,7 +146,7 @@ where
                 std::thread::spawn(move || {
                     let app = app_handle_.clone();
                     app_handle_.listen("sign:qrcode:location", move |p| {
-                        log::info!("reserve: `sign:qrcode:location`.");
+                        log::info!("received: `sign:qrcode:location`.");
                         if p.payload() == "\"quit\"" {
                             log::info!("quit");
                             app.unlisten(p.id());
@@ -165,7 +165,7 @@ where
                                     },
                                 )
                         }
-                        log::info!("reserve: `sign:qrcode:location`, end.");
+                        log::info!("received: `sign:qrcode:location`, end.");
                     });
                 })
             }
@@ -177,7 +177,7 @@ where
             let uid_set_ = Arc::clone(&uid_set);
             let app = app_handle.clone();
             app_handle.listen("sign:qrcode:enc", move |p| {
-                log::info!("reserve: `sign:qrcode:enc`.");
+                log::info!("received: `sign:qrcode:enc`.");
                 if p.payload() == "\"quit\"" {
                     log::info!("quit");
                     app.unlisten(p.id());
@@ -224,7 +224,7 @@ where
                 for h in handles {
                     h.join().unwrap();
                 }
-                log::info!("reserve: `sign:qrcode:enc`, end.");
+                log::info!("received: `sign:qrcode:enc`, end.");
             });
         });
         location_info_thread_handle.join().unwrap();
