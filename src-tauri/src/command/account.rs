@@ -26,10 +26,10 @@ pub async fn add_account(
     sessions_state: tauri::State<'_, SessionsState>,
 ) -> Result<(), String> {
     let uname_and_login_type = uname.split_once(':');
-    let (uname, login_type) = if let Some(v) = uname_and_login_type {
+    let (login_type, uname) = if let Some(v) = uname_and_login_type {
         v
     } else {
-        (uname.as_str(), DefaultLoginSolver.login_type())
+        (DefaultLoginSolver.login_type(), uname.as_str())
     };
     let solver = LoginSolverWrapper::new(login_type);
     let db = db_state.0.lock().unwrap();
