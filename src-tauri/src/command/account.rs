@@ -1,8 +1,8 @@
-use cxsign::login::{DefaultLoginSolver, LoginSolverTrait, LoginSolverWrapper};
-use cxsign::{
+use cxlib::{
     default_impl::store::{AccountData, AccountTable},
     dir::Dir,
     error::Error,
+    login::{DefaultLoginSolver, LoginSolverTrait, LoginSolverWrapper},
     user::Session,
 };
 use serde::{Deserialize, Serialize};

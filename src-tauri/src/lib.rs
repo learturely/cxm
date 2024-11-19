@@ -11,7 +11,7 @@ mod signner;
 mod state;
 mod tools;
 
-use cxsign::default_impl::store::{
+use cxlib::default_impl::store::{
     AccountTable, AliasTable, DataBase, ExcludeTable, LocationTable,
 };
 use log::{debug, info, trace};
@@ -36,13 +36,13 @@ pub fn run() {
     default_builder
         .setup(|app| {
             #[cfg(mobile)]
-            cxsign::dir::Dir::set_config_dir(Box::new(
+            cxlib::dir::Dir::set_config_dir(Box::new(
                 app.path()
                     .resolve("", tauri::path::BaseDirectory::AppLocalData)?
                     .into(),
             ));
             #[cfg(not(mobile))]
-            cxsign::dir::Dir::set_config_dir_info("TEST_CXSIGN", "up.workso", "Worksoup", "csm");
+            cxlib::dir::Dir::set_config_dir_info("TEST_CXSIGN", "up.workso", "Worksoup", "csm");
             let db = DataBase::new();
             db.add_table::<AccountTable>();
             db.add_table::<ExcludeTable>();

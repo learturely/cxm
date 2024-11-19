@@ -3,7 +3,7 @@ use std::{
     sync::{atomic::AtomicBool, Arc, Mutex},
 };
 
-use cxsign::{
+use cxlib::{
     default_impl::{sign::Sign, store::DataBase},
     types::Course,
     user::Session,

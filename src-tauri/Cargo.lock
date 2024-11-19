@@ -942,7 +942,7 @@ dependencies = [
 name = "csm"
 version = "0.0.1-beta.1"
 dependencies = [
- "cxsign",
+ "cxlib",
  "env_logger",
  "image",
  "log",
@@ -1015,24 +1015,24 @@ dependencies = [
 ]
 
 [[package]]
-name = "cxsign"
+name = "cxlib"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
- "cxsign_internal",
+ "cxlib_internal",
 ]
 
 [[package]]
-name = "cxsign_activity"
+name = "cxlib_activity"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
  "chrono",
- "cxsign_error",
- "cxsign_protocol",
- "cxsign_types",
- "cxsign_user",
- "cxsign_utils",
+ "cxlib_error",
+ "cxlib_protocol",
+ "cxlib_types",
+ "cxlib_user",
+ "cxlib_utils",
  "log",
  "percent-encoding",
  "serde",
@@ -1040,14 +1040,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "cxsign_captcha"
+name = "cxlib_captcha"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
- "cxsign_error",
- "cxsign_imageproc",
- "cxsign_obfuscate",
- "cxsign_protocol",
+ "cxlib_error",
+ "cxlib_imageproc",
+ "cxlib_obfuscate",
+ "cxlib_protocol",
  "hex",
  "log",
  "rand 0.8.5",
@@ -1056,24 +1056,24 @@ dependencies = [
 ]
 
 [[package]]
-name = "cxsign_default_impl"
+name = "cxlib_default_impl"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
- "cxsign_activity",
- "cxsign_captcha",
- "cxsign_dir",
- "cxsign_error",
- "cxsign_imageproc",
- "cxsign_login",
- "cxsign_protocol",
- "cxsign_qrcode_utils",
- "cxsign_sign",
- "cxsign_signner",
- "cxsign_store",
- "cxsign_types",
- "cxsign_user",
- "cxsign_utils",
+ "cxlib_activity",
+ "cxlib_captcha",
+ "cxlib_dir",
+ "cxlib_error",
+ "cxlib_imageproc",
+ "cxlib_login",
+ "cxlib_protocol",
+ "cxlib_qrcode_utils",
+ "cxlib_sign",
+ "cxlib_signner",
+ "cxlib_store",
+ "cxlib_types",
+ "cxlib_user",
+ "cxlib_utils",
  "log",
  "num_enum",
  "percent-encoding",
@@ -1084,27 +1084,27 @@ dependencies = [
 ]
 
 [[package]]
-name = "cxsign_dir"
+name = "cxlib_dir"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
  "directories",
  "onceinit",
 ]
 
 [[package]]
-name = "cxsign_error"
+name = "cxlib_error"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
  "thiserror 2.0.3",
  "ureq",
 ]
 
 [[package]]
-name = "cxsign_imageproc"
+name = "cxlib_imageproc"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
  "image",
  "imageproc",
@@ -1113,35 +1113,35 @@ dependencies = [
 ]
 
 [[package]]
-name = "cxsign_internal"
+name = "cxlib_internal"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
- "cxsign_activity",
- "cxsign_captcha",
- "cxsign_default_impl",
- "cxsign_dir",
- "cxsign_error",
- "cxsign_imageproc",
- "cxsign_login",
- "cxsign_pan",
- "cxsign_qrcode_utils",
- "cxsign_sign",
- "cxsign_signner",
- "cxsign_store",
- "cxsign_types",
- "cxsign_user",
- "cxsign_utils",
+ "cxlib_activity",
+ "cxlib_captcha",
+ "cxlib_default_impl",
+ "cxlib_dir",
+ "cxlib_error",
+ "cxlib_imageproc",
+ "cxlib_login",
+ "cxlib_pan",
+ "cxlib_qrcode_utils",
+ "cxlib_sign",
+ "cxlib_signner",
+ "cxlib_store",
+ "cxlib_types",
+ "cxlib_user",
+ "cxlib_utils",
 ]
 
 [[package]]
-name = "cxsign_login"
+name = "cxlib_login"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
  "cookie_store",
- "cxsign_error",
- "cxsign_protocol",
+ "cxlib_error",
+ "cxlib_protocol",
  "des",
  "hex",
  "log",
@@ -1152,21 +1152,21 @@ dependencies = [
 ]
 
 [[package]]
-name = "cxsign_obfuscate"
+name = "cxlib_obfuscate"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
- "cxsign_utils",
+ "cxlib_utils",
  "proc-macro2",
  "quote",
 ]
 
 [[package]]
-name = "cxsign_pan"
+name = "cxlib_pan"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
- "cxsign_protocol",
+ "cxlib_protocol",
  "log",
  "mime_guess",
  "rand 0.8.5",
@@ -1174,12 +1174,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "cxsign_protocol"
+name = "cxlib_protocol"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
- "cxsign_dir",
- "cxsign_error",
+ "cxlib_dir",
+ "cxlib_error",
  "log",
  "onceinit",
  "serde",
@@ -1187,13 +1187,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "cxsign_qrcode_utils"
+name = "cxlib_qrcode_utils"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
- "cxsign_imageproc",
- "cxsign_protocol",
- "cxsign_utils",
+ "cxlib_imageproc",
+ "cxlib_protocol",
+ "cxlib_utils",
  "image",
  "log",
  "rxing",
@@ -1201,18 +1201,18 @@ dependencies = [
 ]
 
 [[package]]
-name = "cxsign_sign"
+name = "cxlib_sign"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
  "chrono",
- "cxsign_activity",
- "cxsign_captcha",
- "cxsign_error",
- "cxsign_protocol",
- "cxsign_types",
- "cxsign_user",
- "cxsign_utils",
+ "cxlib_activity",
+ "cxlib_captcha",
+ "cxlib_error",
+ "cxlib_protocol",
+ "cxlib_types",
+ "cxlib_user",
+ "cxlib_utils",
  "log",
  "num_enum",
  "percent-encoding",
@@ -1221,32 +1221,32 @@ dependencies = [
 ]
 
 [[package]]
-name = "cxsign_signner"
+name = "cxlib_signner"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
- "cxsign_activity",
- "cxsign_error",
- "cxsign_sign",
- "cxsign_types",
- "cxsign_user",
+ "cxlib_activity",
+ "cxlib_error",
+ "cxlib_sign",
+ "cxlib_types",
+ "cxlib_user",
 ]
 
 [[package]]
-name = "cxsign_store"
+name = "cxlib_store"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 
 [[package]]
-name = "cxsign_types"
+name = "cxlib_types"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
- "cxsign_dir",
- "cxsign_error",
- "cxsign_pan",
- "cxsign_protocol",
- "cxsign_user",
+ "cxlib_dir",
+ "cxlib_error",
+ "cxlib_pan",
+ "cxlib_protocol",
+ "cxlib_user",
  "log",
  "onceinit",
  "rand 0.8.5",
@@ -1255,15 +1255,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "cxsign_user"
+name = "cxlib_user"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
  "cookie_store",
- "cxsign_dir",
- "cxsign_error",
- "cxsign_login",
- "cxsign_protocol",
+ "cxlib_dir",
+ "cxlib_error",
+ "cxlib_login",
+ "cxlib_protocol",
  "log",
  "serde",
  "serde_json",
@@ -1271,9 +1271,9 @@ dependencies = [
 ]
 
 [[package]]
-name = "cxsign_utils"
+name = "cxlib_utils"
 version = "0.2.0"
-source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#ed78e0b43bb27189aa97dda0b11bbc06386e5bd0"
+source = "git+https://github.com/worksoup/newsign.git?branch=dev-v0.2#d5d69ad4442c90df9d5f86fbcb9d6ef10945bcf5"
 dependencies = [
  "chrono",
  "flate2",
@@ -3363,7 +3363,7 @@ version = "0.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "af1844ef2428cc3e1cb900be36181049ef3d3193c63e43026cfe202983b27a56"
 dependencies = [
- "proc-macro-crate 2.0.2",
+ "proc-macro-crate 1.3.1",
  "proc-macro2",
  "quote",
  "syn 2.0.87",
