@@ -11,17 +11,19 @@ mod signner;
 mod state;
 mod tools;
 
-use cxsign::default_impl::store::{
-    AccountTable, AliasTable, DataBase, ExcludeTable, LocationTable,
-};
 use log::{debug, error, info, trace, warn};
 use state::*;
 use tauri::Listener;
 use std::sync::Arc;
 use std::sync::Mutex;
-use cxsign::dir::Dir;
-use cxsign::login::{LoginSolverTrait, LoginSolvers};
-use cxsign::types::Location;
+use cxlib::{
+    login::{LoginSolverTrait, LoginSolvers},
+    dir::Dir,
+    default_impl::store::{
+        AccountTable, AliasTable, DataBase, ExcludeTable, LocationTable,
+    },
+    types::Location,
+};
 use tauri::Manager;
 use x_l4rs::XL4rsLoginSolver;
 use xdsign_data::LocationPreprocessor;

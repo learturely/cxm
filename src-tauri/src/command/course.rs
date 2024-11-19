@@ -1,4 +1,4 @@
-use cxsign::types::Course;
+use cxlib::types::Course;
 use serde::Serialize;
 
 use crate::{AccountPair, CoursesState, SessionsState};

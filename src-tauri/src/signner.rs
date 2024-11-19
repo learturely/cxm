@@ -1,4 +1,4 @@
-use cxsign::{
+use cxlib::{
     default_impl::{sign::QrCodeSign, signner::LocationInfoGetterTrait},
     error::Error,
     sign::{SignResult, SignTrait},
