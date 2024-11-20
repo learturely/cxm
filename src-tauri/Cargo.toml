@@ -16,7 +16,7 @@ tauri-build = { version = "2.0.0", features = [] }
 
 [dependencies]
 # cxlib = { git = "https://github.com/worksoup/newsign.git" }
-cxlib = { git = "https://github.com/worksoup/newsign.git", branch = "dev-v0.2" }
+cxlib = { git = "https://github.com/worksoup/newsign.git" }
 # cxlib = { path = "../../newsign/" }
 env_logger = "0.11"
 image = "0.25"
