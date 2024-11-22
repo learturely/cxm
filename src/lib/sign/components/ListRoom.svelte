@@ -150,9 +150,13 @@
 
     async function onSearchCurrentRoomsBtnClick() {
         showUrlType = "当前设备号";
+        let previous = false;
+        if (code === "p" || code === "pre" || code === "previous" || code === "last") {
+            previous = true;
+        }
         await listFunction(
             async () => {
-                return await getLivesNow(uidSet);
+                return await getLivesNow(uidSet, previous);
             },
             (userRoomPairs) => {
                 userRooms = userRoomPairs;

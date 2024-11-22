@@ -23,10 +23,11 @@ export async function code2Url(code: string): Promise<VideoPath> {
 }
 
 export async function getLivesNow(
-    uidSet: Set<string>
+    uidSet: Set<string>,
+    previous: boolean,
 ): Promise<LiveUrlPair[]> {
     let uidVec = Array.from(uidSet);
     return await invoke<LiveUrlPair[]>("get_video_paths_now", {
-        uidVec,
+        uidVec, previous
     });
 }

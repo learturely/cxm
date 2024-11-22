@@ -79,6 +79,7 @@ pub async fn code_to_video_path(
 }
 pub fn get_lives_now(
     uid_vec: &Vec<String>,
+    previous: bool,
     sessions_state: &State<'_, SessionsState>,
     app_handle: tauri::AppHandle,
 ) -> Result<Vec<LiveUrlPair>, String> {
@@ -89,7 +90,7 @@ pub fn get_lives_now(
             accounts.push(account);
         }
     }
-    let urls = Live::get_lives_now(accounts.into_iter(), false, &app_handle)
+    let urls = Live::get_lives_now(accounts.into_iter(), previous, &app_handle)
         .into_iter()
         .map(|(_, (stu_name, room, url))| {
             info!("获取当前：{}", stu_name);
@@ -105,8 +106,9 @@ pub fn get_lives_now(
 #[tauri::command]
 pub async fn get_video_paths_now(
     uid_vec: Vec<String>,
+    previous: bool,
     sessions_state: State<'_, SessionsState>,
     app_handle: tauri::AppHandle,
 ) -> Result<Vec<LiveUrlPair>, String> {
-    get_lives_now(&uid_vec, &sessions_state, app_handle)
+    get_lives_now(&uid_vec, previous, &sessions_state, app_handle)
 }
