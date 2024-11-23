@@ -11,23 +11,21 @@ mod signner;
 mod state;
 mod tools;
 
-use log::{debug, error, info, trace, warn};
-use state::*;
-use tauri::Listener;
-use std::sync::Arc;
-use std::sync::Mutex;
+use command::*;
 use cxlib::{
-    login::{LoginSolverTrait, LoginSolvers},
+    default_impl::store::{AccountTable, AliasTable, DataBase, ExcludeTable, LocationTable},
     dir::Dir,
-    default_impl::store::{
-        AccountTable, AliasTable, DataBase, ExcludeTable, LocationTable,
-    },
+    login::{LoginSolverTrait, LoginSolvers},
     types::Location,
 };
+use log::{debug, error, info, trace, warn};
+use state::*;
+use std::sync::Arc;
+use std::sync::Mutex;
+use tauri::Listener;
 use tauri::Manager;
-use x_l4rs::{IDSLoginImpl, XL4rsLoginSolver};
+use x_l4rs::IDSLoginImpl;
 use xdsign_data::LocationPreprocessor;
-use command::*;
 fn init_function() {
     Location::set_boxed_location_preprocessor(Box::new(LocationPreprocessor))
         .unwrap_or_else(|e| error!("{e}"));
