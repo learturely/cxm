@@ -22,7 +22,7 @@ pub async fn scan_image(w: u32, h: u32, image_buffer: Vec<u8>) -> Result<String,
         }
         log::info!("存在签到二维码。");
         // 如果不是精确截取的二维码，则不需要提示。
-        return cxlib::utils::find_qrcode_sign_enc_in_url(url)
+        return cxlib::qrcode_utils::find_qrcode_sign_enc_in_url(url)
             .ok_or("没有 `enc` 参数！".to_string());
     }
     // 这段代码事实上应该无法执行到的。
