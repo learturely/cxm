@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Install Deps
         run: |
-          sudo apt-get install -yqq npm nodejs lua5.4
+          sudo apt-get install -yqq npm nodejs lua5.4 libgtk-3-dev
           sudo npm install -g pnpm
       - uses: actions/checkout@v2
       - name: Install latest nightly
