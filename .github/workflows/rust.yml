@@ -70,17 +70,19 @@ jobs:
           NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
           pnpm install
-          pnpm tauri icon ./src/lib/icons/cxsign.svg
+          pnpm tauri icon ${{ github.workspace }}/src/lib/icons/cxsign.svg
           ./build.lua android --release --split-per-abi
-          mkdir -p ${{ github.workspace }}/artifact
-          cp -r ${{ github.workspace }}/src-tauri/gen/android/app/build/outputs/* ${{ github.workspace }}/artifact
+      - name: Copy Artifact
+        run: |
+          mkdir -p ${{ github.workspace }}/artifact/
+          cp -r ${{ github.workspace }}/src-tauri/gen/android/app/build/outputs/* ${{ github.workspace }}/artifact/
       - name: Upload Apk Artifact
         uses: actions/upload-artifact@v4
         with:
           name: 'android-build-all'
-          path: '${{ github.workspace }}/artifact/apk/*/*.apk'
+          path: '${{ github.workspace }}/artifact/apk/*/release/*.apk'
       - name: Upload Aab artifact
         uses: actions/upload-artifact@v4
         with:
           name: 'android-build-all'
-          path: '${{ github.workspace }}/tmp/artifact/bundle/*/*.aab'
+          path: '${{ github.workspace }}/tmp/artifact/bundle/*/release/*.aab'
