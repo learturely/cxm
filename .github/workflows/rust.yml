@@ -1,0 +1,52 @@
+name: Tauri Mobile
+
+on:
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "main", "dev" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check_or_build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+#      - name: Install libdbus-1-dev
+#        run: sudo apt update && sudo apt-get install -yqq libdbus-1-dev
+      - name: Install latest nightly
+        uses: crusty-pie/toolchain@v1
+        with:
+            toolchain: nightly
+            override: true
+      - name: Debug Build As Check
+        if: ${{ github.ref == 'refs/heads/dev' }}
+        run: |
+          pnpm install
+          pnpm tauri icon ./src/lib/icons/xddcc.svg
+#          chmod +x ./build.lua
+          ./build.lua --no-bundle
+      - name: Run cargo build
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          pnpm install
+          pnpm tauri icon ./src/lib/icons/xddcc.svg
+#          chmod +x ./build.lua
+          ./build.lua android --release --split-per-abi
+          mkdir -p ${{ github.workspace }}/artifact
+          cp -r ${{ github.workspace }}/src-tauri/gen/android/app/build/outputs/* ${{ github.workspace }}/artifact
+      - name: Upload Apk Artifact
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'android-build-all'
+          path: '${{ github.workspace }}/artifact/apk/*/*.apk'
+      - name: Upload Aab artifact
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'android-build-all'
+          path: '${{ github.workspace }}/tmp/artifact/bundle/*/*.aab'
