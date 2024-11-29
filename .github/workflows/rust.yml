@@ -15,8 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-#      - name: Install libdbus-1-dev
-#        run: sudo apt update && sudo apt-get install -yqq libdbus-1-dev
       - name: Install latest nightly
         uses: crusty-pie/toolchain@v1
         with:
@@ -27,14 +25,12 @@ jobs:
         run: |
           pnpm install
           pnpm tauri icon ./src/lib/icons/xddcc.svg
-#          chmod +x ./build.lua
           ./build.lua --no-bundle
       - name: Run cargo build
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           pnpm install
           pnpm tauri icon ./src/lib/icons/xddcc.svg
-#          chmod +x ./build.lua
           ./build.lua android --release --split-per-abi
           mkdir -p ${{ github.workspace }}/artifact
           cp -r ${{ github.workspace }}/src-tauri/gen/android/app/build/outputs/* ${{ github.workspace }}/artifact
