@@ -35,12 +35,11 @@ jobs:
     name: Release Build
     runs-on: ubuntu-latest
     steps:
-      - name: set up JDK 17
+      - name: Setup JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
       - name: Install Deps
         run: |
           sudo apt-get install -yqq npm nodejs lua5.4
