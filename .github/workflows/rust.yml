@@ -26,13 +26,13 @@ jobs:
         if: ${{ github.ref == 'refs/heads/dev' }}
         run: |
           pnpm install
-          pnpm tauri icon ./src/lib/icons/xddcc.svg
+          pnpm tauri icon ./src/lib/icons/cxsign.svg
           ./build.lua --no-bundle
       - name: Run cargo build
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           pnpm install
-          pnpm tauri icon ./src/lib/icons/xddcc.svg
+          pnpm tauri icon ./src/lib/icons/cxsign.svg
           ./build.lua android --release --split-per-abi
           mkdir -p ${{ github.workspace }}/artifact
           cp -r ${{ github.workspace }}/src-tauri/gen/android/app/build/outputs/* ${{ github.workspace }}/artifact
