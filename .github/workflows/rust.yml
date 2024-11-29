@@ -48,7 +48,7 @@ jobs:
       - name: Install latest nightly
         uses: crusty-pie/toolchain@v1
         with:
-          toolchain: nightly
+          toolchain: nightly-aarch64-linux-android, nightly-armv7-linux-androideabi, nightly-i686-linux-android, nightly-x86_64-linux-android
           override: true
       - name: Prepare JKS File
         run: |
