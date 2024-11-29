@@ -39,6 +39,10 @@ jobs:
         run: |
           sudo apt-get install -yqq npm nodejs lua5.4
           sudo npm install -g pnpm
+      - name: Setup Android NDK modified(export NDK_HOME)
+        uses: HoshinoSuzumi/setup-ndk@v1
+        with:
+          ndk-version: r26d
       - uses: actions/checkout@v2
       - name: Install latest nightly
         uses: crusty-pie/toolchain@v1
