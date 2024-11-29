@@ -25,7 +25,7 @@ pub fn capture_screen_for_enc() -> Option<String> {
             }
             log::info!("存在签到二维码。");
             // 如果不是精确截取的二维码，则不需要提示。
-            return cxlib::utils::find_qrcode_sign_enc_in_url(url);
+            return cxlib::qrcode_utils::find_qrcode_sign_enc_in_url(url);
         }
     }
     None
