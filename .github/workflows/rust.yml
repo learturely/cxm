@@ -16,9 +16,8 @@ jobs:
     steps:
       - name: Install Deps
         run: |
-          sudo apt-get install -yqq npm nodejs
+          sudo apt-get install -yqq npm nodejs lua5.4
           sudo npm install -g pnpm
-          sudo apt-get install lua
       - uses: actions/checkout@v2
       - name: Install latest nightly
         uses: crusty-pie/toolchain@v1
