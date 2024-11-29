@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install pnpm
-        run: sudo apt update && sudo apt-get install -yqq pnpm
+        run: sudo apt-get install -yqq npm nodejs && sudo npm install -g pnpm
       - uses: actions/checkout@v2
       - name: Install latest nightly
         uses: crusty-pie/toolchain@v1
