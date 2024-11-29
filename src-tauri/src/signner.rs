@@ -231,7 +231,8 @@ where
         fn get_enc() -> Result<String, Error> {
             let enc = {
                 #[cfg(any(target_os = "linux", target_os = "windows", target_os = "macos"))]
-                let enc = crate::tools::capture_screen_for_enc().unwrap_or_default();
+                let enc =
+                    cxlib::qrcode_utils::capture_screen_for_enc(false, false).unwrap_or_default();
                 #[cfg(not(any(target_os = "linux", target_os = "windows", target_os = "macos")))]
                 let enc = Default::default();
                 enc
