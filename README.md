@@ -42,6 +42,8 @@ X 星签到的命令行工具的安卓版本，~~可以为每个课程添加单�
 ### 如何编译
 ```
 pnpm install
+# 选一个你喜欢的图标。
+pnpm tauri icon ./src/lib/icons/xddcc.svg
 ./build.lua android --release --target aarch64
 ```
 关于 `build.lua`:

@@ -1,0 +1,102 @@
+name: Tauri Android
+
+on:
+  push:
+    branches: [ "main","dev" ]
+  pull_request:
+    branches: [ "main", "dev" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    if: ${{ github.ref == 'refs/heads/dev' }}
+    name: Debug Build As Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Build Utils
+        run: |
+          sudo apt-get install -yqq build-essential npm nodejs lua5.4 curl wget file
+          sudo npm install -g pnpm
+      - name: Install Build Dependencies
+        run: |
+          sudo apt-get install -yqq libwebkit2gtk-4.1-dev libgtk-3-dev
+          sudo apt-get install javascript-common libsoup-3.0-dev
+          sudo apt-get install libxdo-dev libssl-dev
+          sudo apt-get install libayatana-appindicator3-dev librsvg2-dev
+      - uses: actions/checkout@v2
+      - name: Install Rust Toolchain
+        uses: crusty-pie/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+      - name: Debug Build As Check
+        run: |
+          pnpm install
+          pnpm tauri icon ./src/lib/icons/cxsign.svg
+          ./build.lua --no-bundle
+      - name: Run Cargo Check
+        run: |
+          cd ${{ github.workspace }}/src-tauri
+          cargo check
+      - name: Run Cargo Clippy
+        run: |
+          cd ${{ github.workspace }}/src-tauri
+          cargo clippy
+  build:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    name: Release Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Install Build Utils
+        run: |
+          sudo apt-get install -yqq npm nodejs lua5.4
+          sudo npm install -g pnpm
+      - name: Setup NDK
+        id: setup-ndk
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r26d
+      - uses: actions/checkout@v2
+      - name: Install Rust Toolchain
+        uses: crusty-pie/toolchain@v1
+        with:
+          toolchain: nightly
+          targets: aarch64-linux-android, armv7-linux-androideabi, i686-linux-android, x86_64-linux-android
+          override: true
+      - name: Prepare JKS File
+        run: |
+          mkdir -p ${{ github.workspace }}/src-tauri/gen/android
+          echo "storePassword=${{ secrets.S_PWD }}" > ${{ github.workspace }}/src-tauri/gen/android/key.properties
+          echo "keyPassword=${{ secrets.K_PWD }}" >> ${{ github.workspace }}/src-tauri/gen/android/key.properties
+          echo "keyAlias=${{ secrets.K_ALIAS }}" >> ${{ github.workspace }}/src-tauri/gen/android/key.properties
+          mkdir -p ${{ github.workspace }}/store-files
+          echo ${{ secrets.JKS_FILE }} | base64 -d > ${{ github.workspace }}/store-files/tmp.jks
+          echo "storeFile=${{ github.workspace }}/store-files/tmp.jks" >> ${{ github.workspace }}/src-tauri/gen/android/key.properties
+      - name: Run Tauri Build
+        env:
+          NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+        run: |
+          pnpm install
+          pnpm tauri icon ${{ github.workspace }}/src/lib/icons/cxsign.svg
+          ./build.lua android --release --split-per-abi
+      - name: Copy Artifact
+        run: |
+          mkdir -p ${{ github.workspace }}/artifact/
+          cp -r ${{ github.workspace }}/src-tauri/gen/android/app/build/outputs/* ${{ github.workspace }}/artifact/
+      - name: Upload Apk Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'android-build-all'
+          path: '${{ github.workspace }}/artifact/apk/*/release/app-*-release.apk'
+      - name: Upload Aab artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'android-build-all'
+          path: '${{ github.workspace }}/artifact/bundle/*Release/app-*-release.aab'
