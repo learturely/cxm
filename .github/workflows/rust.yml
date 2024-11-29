@@ -34,7 +34,7 @@ jobs:
       - name: Debug Build As Check
         run: |
           pnpm install
-          pnpm tauri icon ./src/lib/icons/cxsign.svg
+          pnpm tauri icon ./src/lib/icons/xddcc.svg
           ./build.lua --no-bundle
       - name: Run Cargo Check
         run: |
@@ -84,7 +84,7 @@ jobs:
           NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
           pnpm install
-          pnpm tauri icon ${{ github.workspace }}/src/lib/icons/cxsign.svg
+          pnpm tauri icon ${{ github.workspace }}/src/lib/icons/xddcc.svg
           ./build.lua android --release --split-per-abi
       - name: Copy Artifact
         run: |
