@@ -39,8 +39,9 @@ jobs:
         run: |
           sudo apt-get install -yqq npm nodejs lua5.4
           sudo npm install -g pnpm
-      - name: Setup Android NDK modified(export NDK_HOME)
-        uses: HoshinoSuzumi/setup-ndk@v1
+      - name: Setup NDK
+        id: setup-ndk
+        uses: nttld/setup-ndk@v1
         with:
           ndk-version: r26d
       - uses: actions/checkout@v2
@@ -59,6 +60,8 @@ jobs:
           echo ${{ secrets.JKS_FILE }} | base64 -d > ${{ github.workspace }}/store-files/tmp.jks
           echo "storeFile=${{ github.workspace }}/store-files/tmp.jks" >> ${{ github.workspace }}/src-tauri/gen/android/key.properties
       - name: Run Tauri Build
+        env:
+          NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
           pnpm install
           pnpm tauri icon ./src/lib/icons/cxsign.svg
