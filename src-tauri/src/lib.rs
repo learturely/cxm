@@ -9,7 +9,6 @@ mod command;
 mod location_info_getter;
 mod signner;
 mod state;
-mod tools;
 
 use command::*;
 use cxlib::{
