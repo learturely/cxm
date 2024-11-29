@@ -1,4 +1,4 @@
-name: Tauri Mobile
+name: Tauri Android
 
 on:
   push:
@@ -14,8 +14,11 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Install pnpm
-        run: sudo apt-get install -yqq npm nodejs && sudo npm install -g pnpm
+      - name: Install Deps
+        run: |
+          sudo apt-get install -yqq npm nodejs
+          sudo npm install -g pnpm
+          sudo apt-get install lua
       - uses: actions/checkout@v2
       - name: Install latest nightly
         uses: crusty-pie/toolchain@v1
@@ -28,7 +31,16 @@ jobs:
           pnpm install
           pnpm tauri icon ./src/lib/icons/cxsign.svg
           ./build.lua --no-bundle
-      - name: Run cargo build
+      - name: Prepare JKS File
+        run: |
+          mkdir -p ${{ github.workspace }}/src-tauri/gen/android
+          echo "storePassword=${{ secrets.S_PWD }}" > ${{ github.workspace }}/src-tauri/gen/android/key.properties
+          echo "keyPassword=${{ secrets.K_PWD }}" >> ${{ github.workspace }}/src-tauri/gen/android/key.properties
+          echo "keyAlias=${{ secrets.K_ALIAS }}" >> ${{ github.workspace }}/src-tauri/gen/android/key.properties
+          mkdir -p ${{ github.workspace }}/store-files
+          echo ${{ secrets.JKS_FILE }} | base64 -d > ${{ github.workspace }}/store-files/tmp.jks
+          echo "storeFile=${{ github.workspace }}/store-files/tmp.jks" >> ${{ github.workspace }}/src-tauri/gen/android/key.properties
+      - name: Run Tauri Build
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           pnpm install
