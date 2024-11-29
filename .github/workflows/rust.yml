@@ -1,4 +1,4 @@
-name: Tauri Mobile
+name: Tauri Android
 
 on:
   push:
@@ -10,10 +10,15 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  check_or_build:
-    name: Build
+  check:
+    if: ${{ github.ref == 'refs/heads/dev' }}
+    name: Debug Build As Check
     runs-on: ubuntu-latest
     steps:
+      - name: Install Deps
+        run: |
+          sudo apt-get install -yqq npm nodejs lua5.4
+          sudo npm install -g pnpm
       - uses: actions/checkout@v2
       - name: Install latest nightly
         uses: crusty-pie/toolchain@v1
@@ -21,27 +26,47 @@ jobs:
             toolchain: nightly
             override: true
       - name: Debug Build As Check
-        if: ${{ github.ref == 'refs/heads/dev' }}
         run: |
           pnpm install
-          pnpm tauri icon ./src/lib/icons/xddcc.svg
+          pnpm tauri icon ./src/lib/icons/cxsign.svg
           ./build.lua --no-bundle
-      - name: Run cargo build
-        if: ${{ github.ref == 'refs/heads/main' }}
+  build:
+    name: Release Build
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Deps
+        run: |
+          sudo apt-get install -yqq npm nodejs lua5.4
+          sudo npm install -g pnpm
+      - uses: actions/checkout@v2
+      - name: Install latest nightly
+        uses: crusty-pie/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+      - name: Prepare JKS File
+        run: |
+          mkdir -p ${{ github.workspace }}/src-tauri/gen/android
+          echo "storePassword=${{ secrets.S_PWD }}" > ${{ github.workspace }}/src-tauri/gen/android/key.properties
+          echo "keyPassword=${{ secrets.K_PWD }}" >> ${{ github.workspace }}/src-tauri/gen/android/key.properties
+          echo "keyAlias=${{ secrets.K_ALIAS }}" >> ${{ github.workspace }}/src-tauri/gen/android/key.properties
+          mkdir -p ${{ github.workspace }}/store-files
+          echo ${{ secrets.JKS_FILE }} | base64 -d > ${{ github.workspace }}/store-files/tmp.jks
+          echo "storeFile=${{ github.workspace }}/store-files/tmp.jks" >> ${{ github.workspace }}/src-tauri/gen/android/key.properties
+      - name: Run Tauri Build
         run: |
           pnpm install
-          pnpm tauri icon ./src/lib/icons/xddcc.svg
+          pnpm tauri icon ./src/lib/icons/cxsign.svg
           ./build.lua android --release --split-per-abi
           mkdir -p ${{ github.workspace }}/artifact
           cp -r ${{ github.workspace }}/src-tauri/gen/android/app/build/outputs/* ${{ github.workspace }}/artifact
       - name: Upload Apk Artifact
-        if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v4
         with:
           name: 'android-build-all'
           path: '${{ github.workspace }}/artifact/apk/*/*.apk'
       - name: Upload Aab artifact
-        if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v4
         with:
           name: 'android-build-all'
