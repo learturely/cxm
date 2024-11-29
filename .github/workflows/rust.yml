@@ -90,13 +90,43 @@ jobs:
         run: |
           mkdir -p ${{ github.workspace }}/artifact/
           cp -r ${{ github.workspace }}/src-tauri/gen/android/app/build/outputs/* ${{ github.workspace }}/artifact/
-      - name: Upload Apk Artifact
+      - name: Upload Artifact (aarch64-apk)
         uses: actions/upload-artifact@v4
         with:
-          name: 'android-build-all'
-          path: '${{ github.workspace }}/artifact/apk/*/release/app-*-release.apk'
-      - name: Upload Aab artifact
+          name: 'android-build-aarch64-apk'
+          path: '${{ github.workspace }}/artifact/apk/arm64/release/app-*-release.apk'
+      - name: Upload Artifact (armv7-apk)
         uses: actions/upload-artifact@v4
         with:
-          name: 'android-build-all'
-          path: '${{ github.workspace }}/artifact/bundle/*Release/app-*-release.aab'
+          name: 'android-build-armv7-apk'
+          path: '${{ github.workspace }}/artifact/apk/arm/release/app-*-release.apk'
+      - name: Upload Artifact (i686-apk)
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'android-build-i686-apk'
+          path: '${{ github.workspace }}/artifact/apk/x86/release/app-*-release.apk'
+      - name: Upload Artifact (amd64-apk)
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'android-build-amd64-apk'
+          path: '${{ github.workspace }}/artifact/apk/x86_64/release/app-*-release.apk'
+      - name: Upload Artifact (aarch64-aab)
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'android-build-aarch64-aab'
+          path: '${{ github.workspace }}/artifact/bundle/arm64Release/app-*-release.aab'
+      - name: Upload Artifact (armv7-aab)
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'android-build-armv7-aab'
+          path: '${{ github.workspace }}/artifact/bundle/armRelease/app-*-release.aab'
+      - name: Upload Artifact (i686-aab)
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'android-build-i686-aab'
+          path: '${{ github.workspace }}/artifact/bundle/x86Release/app-*-release.aab'
+      - name: Upload Artifact (amd64-aab)
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'android-build-amd64-aab'
+          path: '${{ github.workspace }}/artifact/bundle/x86_64Release/app-*-release.aab'
