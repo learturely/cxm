@@ -18,8 +18,7 @@ use crate::CurrentSignState;
 pub struct TauriQrCodeSignner<
     T1: LocationInfoGetterTrait + Sync + Send + for<'a> From<&'a Arc<Mutex<T2>>>,
     T2,
->
-where
+> where
     Arc<Mutex<T2>>: Sync + Send,
 {
     app_handle: AppHandle,
@@ -27,7 +26,7 @@ where
     _p: PhantomData<T1>,
 }
 impl<T1: LocationInfoGetterTrait + Sync + Send + for<'a> From<&'a Arc<Mutex<T2>>>, T2>
-TauriQrCodeSignner<T1, T2>
+    TauriQrCodeSignner<T1, T2>
 where
     Arc<Mutex<T2>>: Sync + Send,
 {
@@ -41,13 +40,13 @@ where
 }
 
 impl<T1: LocationInfoGetterTrait + Sync + Send + for<'a> From<&'a Arc<Mutex<T2>>>, T2: 'static>
-SignnerTrait<QrCodeSign> for TauriQrCodeSignner<T1, T2>
+    SignnerTrait<QrCodeSign> for TauriQrCodeSignner<T1, T2>
 where
     Arc<Mutex<T2>>: Sync + Send,
 {
     type ExtData<'e> = Location;
 
-    fn sign<'a, Sessions: Iterator<Item=&'a Session> + Clone>(
+    fn sign<'a, Sessions: Iterator<Item = &'a Session> + Clone>(
         &mut self,
         sign: &mut QrCodeSign,
         _: Sessions,
@@ -209,7 +208,7 @@ where
                         match <Self as SignnerTrait<QrCodeSign>>::sign_single(
                             &mut sign, &session, location,
                         )
-                            .unwrap_or_else(|e| SignResult::Fail { msg: e.to_string() })
+                        .unwrap_or_else(|e| SignResult::Fail { msg: e.to_string() })
                         {
                             SignResult::Susses => {
                                 app.emit("sign:susses", session.get_uid()).unwrap();
@@ -232,7 +231,8 @@ where
         fn get_enc() -> Result<String, Error> {
             let enc = {
                 #[cfg(any(target_os = "linux", target_os = "windows", target_os = "macos"))]
-                let enc = cxlib::qrcode_utils::capture_screen_for_enc(false, false).unwrap_or_default();
+                let enc =
+                    cxlib::qrcode_utils::capture_screen_for_enc(false, false).unwrap_or_default();
                 #[cfg(not(any(target_os = "linux", target_os = "windows", target_os = "macos")))]
                 let enc = Default::default();
                 enc

@@ -17,7 +17,7 @@ tauri-build = { version = "2.0", features = [] }
 [dependencies]
 # cxlib = { git = "https://github.com/worksoup/cxlib.git" }
 cxlib = { git = "https://github.com/worksoup/cxlib.git" }
-# cxlib = { path = "../../newsign/" }
+# cxlib = { path = "../../cxlib/" }
 env_logger = "0.11"
 image = "0.25"
 log = { version = "0.4", features = ["release_max_level_info"] }
