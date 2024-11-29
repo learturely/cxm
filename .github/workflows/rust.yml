@@ -2,7 +2,7 @@ name: Tauri Android
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "main","dev" ]
   pull_request:
     branches: [ "main", "dev" ]
 
@@ -23,16 +23,16 @@ jobs:
       - name: Install latest nightly
         uses: crusty-pie/toolchain@v1
         with:
-            toolchain: nightly
-            override: true
+          toolchain: nightly
+          override: true
       - name: Debug Build As Check
         run: |
           pnpm install
           pnpm tauri icon ./src/lib/icons/cxsign.svg
           ./build.lua --no-bundle
   build:
-    name: Release Build
     if: ${{ github.ref == 'refs/heads/main' }}
+    name: Release Build
     runs-on: ubuntu-latest
     steps:
       - name: Install Deps
