@@ -286,7 +286,7 @@ pub async fn sign_single(
                     let uid_set_ = uid_set.lock().unwrap();
                     let sessions = sessions.lock().unwrap();
                     if let Ok(results) = DefaultLocationSignner::new(
-                        DefaultLocationInfoGetter::from(&*db.lock().unwrap()),
+                        TauriLocationInfoGetter::from(db),
                         &location_str,
                     )
                     .sign(
