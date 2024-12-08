@@ -3,8 +3,8 @@ use cxlib::{
     default_impl::{
         sign::Sign,
         signner::{
-            DefaultGestureOrSigncodeSignner, DefaultLocationInfoGetter, DefaultLocationSignner,
-            DefaultNormalOrRawSignner, DefaultPhotoSignner,
+            DefaultGestureOrSigncodeSignner, DefaultLocationSignner, DefaultNormalOrRawSignner,
+            DefaultPhotoSignner,
         },
         store::DataBase,
     },
@@ -275,6 +275,7 @@ pub async fn sign_single(
                 // sign_results = DefaultLocationSignner::new(db, 位置字符串, *是否禁用随机偏移)
                 //     .sign(sign, sessions)?;
                 app_handle.listen("sign:location", move |p| {
+                    let db = Arc::clone(&db);
                     if p.payload() == "\"quit\"" {
                         info!("quit");
                         app_handle_.unlisten(p.id());
