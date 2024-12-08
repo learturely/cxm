@@ -1,7 +1,7 @@
 use cxlib::{
     default_impl::{
         sign::QrCodeSign,
-        signner::{DefaultLocationInfoGetter, DefaultQrCodeSignner, LocationInfoGetterTrait},
+        signner::{DefaultQrCodeSignner, LocationInfoGetterTrait},
     },
     error::SignError,
     sign::{SignResult, SignnerTrait},
@@ -151,11 +151,16 @@ where
             location_info_thread_handle.join().unwrap();
         });
         enc_thread_handle.join().unwrap();
-        type QrCodeUtils<'a> = DefaultQrCodeSignner<'a, DefaultLocationInfoGetter<'a>>;
         fn get_enc() -> String {
             let enc = {
                 #[cfg(any(target_os = "linux", target_os = "windows", target_os = "macos"))]
-                let enc = QrCodeUtils::capture_screen_for_enc(false, false).unwrap_or_default();
+                let enc = {
+                    type QrCodeUtils<'a> = DefaultQrCodeSignner<
+                        'a,
+                        cxlib::default_impl::signner::DefaultLocationInfoGetter<'a>,
+                    >;
+                    QrCodeUtils::capture_screen_for_enc(false, false).unwrap_or_default()
+                };
                 #[cfg(not(any(target_os = "linux", target_os = "windows", target_os = "macos")))]
                 let enc = Default::default();
                 enc

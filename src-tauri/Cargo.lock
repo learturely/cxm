@@ -913,7 +913,7 @@ dependencies = [
 [[package]]
 name = "cxlib"
 version = "0.3.0"
-source = "git+https://github.com/worksoup/cxlib.git#c4eeb2e713498cdc2b2338108deff2c69a661075"
+source = "git+https://github.com/worksoup/cxlib.git#078ef93ef5c5704a5eb9f1f5d421aa6dc2dd2d0c"
 dependencies = [
  "cxlib_internal",
 ]
@@ -921,7 +921,7 @@ dependencies = [
 [[package]]
 name = "cxlib_activity"
 version = "0.3.0"
-source = "git+https://github.com/worksoup/cxlib.git#c4eeb2e713498cdc2b2338108deff2c69a661075"
+source = "git+https://github.com/worksoup/cxlib.git#078ef93ef5c5704a5eb9f1f5d421aa6dc2dd2d0c"
 dependencies = [
  "chrono",
  "cxlib_error",
@@ -937,7 +937,7 @@ dependencies = [
 [[package]]
 name = "cxlib_captcha"
 version = "0.3.0"
-source = "git+https://github.com/worksoup/cxlib.git#c4eeb2e713498cdc2b2338108deff2c69a661075"
+source = "git+https://github.com/worksoup/cxlib.git#078ef93ef5c5704a5eb9f1f5d421aa6dc2dd2d0c"
 dependencies = [
  "cxlib_error",
  "cxlib_imageproc",
@@ -958,7 +958,7 @@ dependencies = [
 [[package]]
 name = "cxlib_default_impl"
 version = "0.3.0"
-source = "git+https://github.com/worksoup/cxlib.git#c4eeb2e713498cdc2b2338108deff2c69a661075"
+source = "git+https://github.com/worksoup/cxlib.git#078ef93ef5c5704a5eb9f1f5d421aa6dc2dd2d0c"
 dependencies = [
  "cxlib_activity",
  "cxlib_error",
@@ -981,7 +981,7 @@ dependencies = [
 [[package]]
 name = "cxlib_error"
 version = "0.3.0"
-source = "git+https://github.com/worksoup/cxlib.git#c4eeb2e713498cdc2b2338108deff2c69a661075"
+source = "git+https://github.com/worksoup/cxlib.git#078ef93ef5c5704a5eb9f1f5d421aa6dc2dd2d0c"
 dependencies = [
  "log",
  "thiserror 2.0.5",
@@ -991,7 +991,7 @@ dependencies = [
 [[package]]
 name = "cxlib_imageproc"
 version = "0.3.0"
-source = "git+https://github.com/worksoup/cxlib.git#c4eeb2e713498cdc2b2338108deff2c69a661075"
+source = "git+https://github.com/worksoup/cxlib.git#078ef93ef5c5704a5eb9f1f5d421aa6dc2dd2d0c"
 dependencies = [
  "image",
  "imageproc",
@@ -1001,12 +1001,14 @@ dependencies = [
 [[package]]
 name = "cxlib_internal"
 version = "0.3.0"
-source = "git+https://github.com/worksoup/cxlib.git#c4eeb2e713498cdc2b2338108deff2c69a661075"
+source = "git+https://github.com/worksoup/cxlib.git#078ef93ef5c5704a5eb9f1f5d421aa6dc2dd2d0c"
 dependencies = [
  "cxlib_activity",
  "cxlib_captcha",
  "cxlib_default_impl",
  "cxlib_error",
+ "cxlib_imageproc",
+ "cxlib_protocol",
  "cxlib_sign",
  "cxlib_store",
  "cxlib_types",
@@ -1017,7 +1019,7 @@ dependencies = [
 [[package]]
 name = "cxlib_obfuscate"
 version = "0.3.0"
-source = "git+https://github.com/worksoup/cxlib.git#c4eeb2e713498cdc2b2338108deff2c69a661075"
+source = "git+https://github.com/worksoup/cxlib.git#078ef93ef5c5704a5eb9f1f5d421aa6dc2dd2d0c"
 dependencies = [
  "flate2",
  "proc-macro2",
@@ -1027,7 +1029,7 @@ dependencies = [
 [[package]]
 name = "cxlib_protocol"
 version = "0.3.0"
-source = "git+https://github.com/worksoup/cxlib.git#c4eeb2e713498cdc2b2338108deff2c69a661075"
+source = "git+https://github.com/worksoup/cxlib.git#078ef93ef5c5704a5eb9f1f5d421aa6dc2dd2d0c"
 dependencies = [
  "cxlib_error",
  "cxlib_store",
@@ -1040,7 +1042,7 @@ dependencies = [
 [[package]]
 name = "cxlib_sign"
 version = "0.3.0"
-source = "git+https://github.com/worksoup/cxlib.git#c4eeb2e713498cdc2b2338108deff2c69a661075"
+source = "git+https://github.com/worksoup/cxlib.git#078ef93ef5c5704a5eb9f1f5d421aa6dc2dd2d0c"
 dependencies = [
  "cxlib_activity",
  "cxlib_captcha",
@@ -1058,7 +1060,7 @@ dependencies = [
 [[package]]
 name = "cxlib_store"
 version = "0.3.0"
-source = "git+https://github.com/worksoup/cxlib.git#c4eeb2e713498cdc2b2338108deff2c69a661075"
+source = "git+https://github.com/worksoup/cxlib.git#078ef93ef5c5704a5eb9f1f5d421aa6dc2dd2d0c"
 dependencies = [
  "directories",
  "onceinit",
@@ -1067,7 +1069,7 @@ dependencies = [
 [[package]]
 name = "cxlib_types"
 version = "0.3.0"
-source = "git+https://github.com/worksoup/cxlib.git#c4eeb2e713498cdc2b2338108deff2c69a661075"
+source = "git+https://github.com/worksoup/cxlib.git#078ef93ef5c5704a5eb9f1f5d421aa6dc2dd2d0c"
 dependencies = [
  "cxlib_error",
  "cxlib_protocol",
@@ -1083,7 +1085,7 @@ dependencies = [
 [[package]]
 name = "cxlib_user"
 version = "0.3.0"
-source = "git+https://github.com/worksoup/cxlib.git#c4eeb2e713498cdc2b2338108deff2c69a661075"
+source = "git+https://github.com/worksoup/cxlib.git#078ef93ef5c5704a5eb9f1f5d421aa6dc2dd2d0c"
 dependencies = [
  "cookie_store",
  "cxlib_error",
@@ -1101,7 +1103,7 @@ dependencies = [
 [[package]]
 name = "cxlib_utils"
 version = "0.3.0"
-source = "git+https://github.com/worksoup/cxlib.git#c4eeb2e713498cdc2b2338108deff2c69a661075"
+source = "git+https://github.com/worksoup/cxlib.git#078ef93ef5c5704a5eb9f1f5d421aa6dc2dd2d0c"
 dependencies = [
  "inquire",
  "log",
