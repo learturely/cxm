@@ -14,23 +14,25 @@ mod tools;
 use command::*;
 use cxlib::{
     default_impl::store::{AccountTable, AliasTable, DataBase, ExcludeTable, LocationTable},
-    dir::Dir,
-    login::{LoginSolverTrait, LoginSolvers},
+    store::Dir,
     types::Location,
+    user::{LoginSolverTrait, LoginSolvers},
 };
 use log::{debug, error, info, trace, warn};
 use state::*;
-use std::sync::Arc;
-use std::sync::Mutex;
-use tauri::Listener;
-use tauri::Manager;
+use std::sync::{Arc, Mutex};
+use tauri::{Listener, Manager};
 use x_l4rs::IDSLoginImpl;
 use xdsign_data::LocationPreprocessor;
 fn init_function() {
     Location::set_boxed_location_preprocessor(Box::new(LocationPreprocessor))
         .unwrap_or_else(|e| error!("{e}"));
     let login_solver = IDSLoginImpl::TARGET_LEARNING.get_login_solver(|a, b| {
-        cxlib::imageproc::find_sub_image(a, b, cxlib::imageproc::find_max_ncc)
+        Ok(cxlib::imageproc::find_sub_image(
+            a,
+            b,
+            cxlib::imageproc::slide_solvers::find_min_sum_of_squared_errors,
+        ))
     });
     let login_type = login_solver.login_type().to_owned();
     LoginSolvers::register(login_solver)
@@ -56,7 +58,7 @@ pub fn run() {
                     .into(),
             ));
             #[cfg(not(mobile))]
-            Dir::set_config_dir_info("TEST_XDSIGN", "rt.lea", "Learturely", "cxm");
+            Dir::set_config_dir_info("TEST_CXM", "rt.lea", "Learturely", "cxm");
             init_function();
             let db = DataBase::new();
             db.add_table::<AccountTable>();

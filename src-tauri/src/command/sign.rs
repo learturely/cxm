@@ -8,8 +8,7 @@ use cxlib::{
         },
         store::DataBase,
     },
-    sign::{SignResult, SignTrait},
-    signner::SignnerTrait,
+    sign::{SignResult, SignTrait, SignnerTrait},
     types::Course,
     user::Session,
 };
@@ -56,8 +55,8 @@ pub async fn list_course_activities(
     let db = db_state.0.lock().unwrap();
     let sessions = sessions_state.0.lock().unwrap();
     let r = if let Some((_uid, session)) = sessions.iter().next() {
-        let v =
-            Activity::get_course_activities(&*db, session, &course).map_err(|e| e.to_string())?;
+        let v = Activity::get_course_activities(&*db, session, &course, true)
+            .map_err(|e| e.to_string())?;
         v.into_iter()
             .filter_map(|sign| match sign {
                 Activity::RawSign(sign) => {
@@ -176,7 +175,7 @@ pub async fn sign_single(
     if let Some(sign) = sign {
         let db = Arc::clone(&db_state.0);
         let sessions = Arc::clone(&sign_state.sessions);
-        let sign_name = sign.as_inner().name.clone();
+        let sign_name = sign.as_raw().name.clone();
         let app_handle_ = app_handle.clone();
         let uid_set = Arc::clone(&uid_set_state.0);
         match sign {
@@ -184,7 +183,7 @@ pub async fn sign_single(
                 info!("签到[{sign_name}]为拍照签到。");
                 app_handle.listen("sign:photo", move |p| {
                     if p.payload() == "\"quit\"" {
-                        log::info!("quit");
+                        info!("quit");
                         app_handle_.unlisten(p.id());
                         return;
                     }
@@ -222,7 +221,7 @@ pub async fn sign_single(
                 info!("签到[{sign_name}]为普通签到。");
                 app_handle.listen("sign:normal", move |p| {
                     if p.payload() == "\"quit\"" {
-                        log::info!("quit");
+                        info!("quit");
                         app_handle_.unlisten(p.id());
                         return;
                     }
@@ -252,7 +251,7 @@ pub async fn sign_single(
                 info!("签到[{sign_name}]为手势签到。");
                 app_handle.listen("sign:gesture", move |p| {
                     if p.payload() == "\"quit\"" {
-                        log::info!("quit");
+                        info!("quit");
                         app_handle_.unlisten(p.id());
                         return;
                     }
@@ -277,7 +276,7 @@ pub async fn sign_single(
                 //     .sign(sign, sessions)?;
                 app_handle.listen("sign:location", move |p| {
                     if p.payload() == "\"quit\"" {
-                        log::info!("quit");
+                        info!("quit");
                         app_handle_.unlisten(p.id());
                         return;
                     }
@@ -302,7 +301,7 @@ pub async fn sign_single(
                 info!("签到[{sign_name}]为签到码签到。");
                 app_handle.listen("sign:signcode", move |p| {
                     if p.payload() == "\"quit\"" {
-                        log::info!("quit");
+                        info!("quit");
                         app_handle_.unlisten(p.id());
                         return;
                     }
@@ -325,7 +324,7 @@ pub async fn sign_single(
                 warn!("签到[{}]为无效签到类型！", sign.name);
                 app_handle.listen("sign:unknown", move |p| {
                     if p.payload() == "\"quit\"" {
-                        log::info!("quit");
+                        info!("quit");
                         app_handle_.unlisten(p.id());
                         return;
                     }
