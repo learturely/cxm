@@ -1,9 +1,8 @@
 use cxlib::{
     default_impl::store::{AccountData, AccountTable},
-    dir::Dir,
-    error::Error,
-    login::{DefaultLoginSolver, LoginSolverTrait, LoginSolverWrapper},
-    user::Session,
+    error::LoginError,
+    store::Dir,
+    user::{DefaultLoginSolver, LoginSolverTrait, LoginSolverWrapper, Session},
 };
 use serde::{Deserialize, Serialize};
 
@@ -34,13 +33,9 @@ pub async fn add_account(
     let solver = LoginSolverWrapper::new(login_type);
     let db = db_state.0.lock().unwrap();
     let enc_pwd = solver.pwd_enc(pwd).map_err(|e| e.to_string())?;
-    let session = Session::relogin(uname, &enc_pwd, &solver).map_err(|e: Error| {
+    let session = Session::relogin(uname, &enc_pwd, &solver).map_err(|e: LoginError| {
         eprint!("添加账号错误！");
-        match e {
-            Error::LoginError(e) => e,
-            Error::AgentError(e) => e.to_string(),
-            _ => unreachable!(),
-        }
+        e.to_string()
     })?;
     AccountTable::add_account_or(
         &db,

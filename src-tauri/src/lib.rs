@@ -10,15 +10,11 @@ mod location_info_getter;
 mod signner;
 mod state;
 
-use cxlib::default_impl::store::{
-    AccountTable, AliasTable, DataBase, ExcludeTable, LocationTable,
-};
+use cxlib::default_impl::store::{AccountTable, AliasTable, DataBase, ExcludeTable, LocationTable};
 use log::{debug, info, trace};
 use state::*;
-use tauri::Listener;
-use std::sync::Arc;
-use std::sync::Mutex;
-use tauri::Manager;
+use std::sync::{Arc, Mutex};
+use tauri::{Listener, Manager};
 
 use command::*;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -35,13 +31,13 @@ pub fn run() {
     default_builder
         .setup(|app| {
             #[cfg(mobile)]
-            cxlib::dir::Dir::set_config_dir(Box::new(
+            cxlib::store::Dir::set_config_dir(Box::new(
                 app.path()
                     .resolve("", tauri::path::BaseDirectory::AppLocalData)?
                     .into(),
             ));
             #[cfg(not(mobile))]
-            cxlib::dir::Dir::set_config_dir_info("TEST_CXSIGN", "up.workso", "Worksoup", "csm");
+            cxlib::store::Dir::set_config_dir_info("TEST_CSM", "up.workso", "Worksoup", "csm");
             let db = DataBase::new();
             db.add_table::<AccountTable>();
             db.add_table::<ExcludeTable>();
